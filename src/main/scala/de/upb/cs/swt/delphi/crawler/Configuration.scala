@@ -49,6 +49,9 @@ class Configuration {
   }
 
   val mavenRepoBase: URI = new URI("http://repo1.maven.org/maven2/") // TODO: Create a local demo server "http://localhost:8881/maven2/"
+  val npmRepoBase: URI = new URI("https://registry.npmjs.org/")
+
+
   val controlServerPort : Int = 8882
 
   val defaultElasticSearchPort : Int = 9200

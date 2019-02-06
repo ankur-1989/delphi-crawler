@@ -31,6 +31,15 @@ package object preprocessing {
     */
   case class JarFile(is: InputStream, url: URL)
 
+
+  /**  @author Ankur Gupta
+    * Used for identifaction (pattern matching) of gunzip file
+    * @param is  zip file stream
+    * @param url
+    */
+
+  case class ZipFile(is: InputStream , url: URL)
+
   /**
     * Used for identification (Pattern matching) of pom file
     * @param is pom file stream

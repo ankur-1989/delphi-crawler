@@ -38,6 +38,11 @@ trait ElasticIndexMaintenance extends AppLogging {
       textField("repoUrl"),
       keywordField("commitId"),
 
+      //NPM
+      textField("packagename"),
+      keywordField("npmversion"),
+
+
       //Maven
       textField("groupId"),
       textField("artifactId"),
