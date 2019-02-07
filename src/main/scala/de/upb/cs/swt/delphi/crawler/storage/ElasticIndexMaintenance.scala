@@ -39,7 +39,6 @@ trait ElasticIndexMaintenance extends AppLogging {
       keywordField("commitId"),
 
       //NPM
-      textField("packagename"),
       keywordField("npmversion"),
 
 

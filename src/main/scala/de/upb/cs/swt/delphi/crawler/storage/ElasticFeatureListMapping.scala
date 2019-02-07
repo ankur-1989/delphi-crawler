@@ -422,6 +422,7 @@ object ElasticFeatureListMapping {
     "Class File Java 6" -> intField,
     "Class File Java 7" -> intField,
     "Class File Java 8" -> intField,
-    "Class File Java 9" -> intField
+    "Class File Java 9" -> intField,
+    "Ploc" -> intField
   )
 }

@@ -17,7 +17,7 @@ trait PackageExistsQuery {
 
     client.execute {
       searchWithType(delphiProjectType) query must (
-        matchQuery("packagename",identifier.toUniqueString)
+        matchQuery("name",identifier.toUniqueString)
       )
     }.await match {
       case RequestSuccess(_,_,_,SearchResponse(_, false, false, _, _, _, _, hits)) => (hits.total > 0)

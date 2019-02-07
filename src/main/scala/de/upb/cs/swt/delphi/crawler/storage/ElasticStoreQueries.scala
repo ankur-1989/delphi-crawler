@@ -23,6 +23,7 @@ import com.sksamuel.elastic4s.http.update.UpdateResponse
 import com.sksamuel.elastic4s.http.{ElasticClient, Response}
 import de.upb.cs.swt.delphi.crawler.discovery.git.GitIdentifier
 import de.upb.cs.swt.delphi.crawler.discovery.maven.MavenIdentifier
+import de.upb.cs.swt.delphi.crawler.discovery.npm.NpmIdentifier
 import de.upb.cs.swt.delphi.crawler.processing.{HermesAnalyzer, HermesResults}
 import org.joda.time.DateTime
 
@@ -33,7 +34,7 @@ import org.joda.time.DateTime
   * @author Alexander MacKenzie
   */
 trait ElasticStoreQueries {
-  this: ArtifactIdentityQuery =>
+  this: ArtifactIdentityQuery with PackageIdentityQuery =>
 
   def store(h: HermesResults)(implicit client: ElasticClient, log: LoggingAdapter): Option[Response[UpdateResponse]] = {
     elasticId(h.identifier) match {
@@ -48,6 +49,8 @@ trait ElasticStoreQueries {
       case None => log.warning(s"Tried to push hermes results for non-existing identifier: ${h.identifier}."); None
     }
   }
+
+
 
   def store(g: GitIdentifier)(implicit client: ElasticClient, log: LoggingAdapter): Response[IndexResponse] = {
     log.info("Pushing new git identifier to elastic: [{}]", g)
@@ -72,5 +75,19 @@ trait ElasticStoreQueries {
             "version" -> m.version),
           "discovered" -> DateTime.now())
     }.await
+  }
+
+  // Added to index the npm packages Ankur Gupta
+
+  def store(n: NpmIdentifier)(implicit client: ElasticClient, log: LoggingAdapter): Response[IndexResponse] = {
+       log.info("Pushing new npm identifier to elastic: [{}]", n)
+       client.execute {
+         indexInto(delphiProjectType).id(n.toUniqueString)
+           .fields("name" -> n.toUniqueString,
+             "source" -> "NPM",
+             "identifier" -> Map(
+               "npmversion" -> n.version),
+             "discovered" -> DateTime.now())
+       }.await
   }
 }

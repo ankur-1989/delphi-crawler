@@ -23,6 +23,7 @@ import de.upb.cs.swt.delphi.crawler.Identifier
 import de.upb.cs.swt.delphi.crawler.discovery.git.GitIdentifier
 import de.upb.cs.swt.delphi.crawler.tools.ActorStreamIntegrationSignals.{Ack, StreamCompleted, StreamFailure, StreamInitialized}
 import de.upb.cs.swt.delphi.crawler.discovery.maven.MavenIdentifier
+import de.upb.cs.swt.delphi.crawler.discovery.npm.NpmIdentifier
 import de.upb.cs.swt.delphi.crawler.processing.HermesResults
 
 /**
@@ -30,7 +31,10 @@ import de.upb.cs.swt.delphi.crawler.processing.HermesResults
   * @param client The currently active elasticsearch client
   * @author Ben Hermann
   */
-class ElasticActor(client: ElasticClient) extends Actor with ActorLogging with ArtifactIdentityQuery with ElasticStoreQueries {
+class ElasticActor(client: ElasticClient) extends Actor with ActorLogging
+  with ArtifactIdentityQuery
+  with PackageIdentityQuery
+  with ElasticStoreQueries {
   private implicit val c : ElasticClient = client
   private implicit val l : LoggingAdapter = log
 
@@ -51,10 +55,19 @@ class ElasticActor(client: ElasticClient) extends Actor with ActorLogging with A
       store(g)
       sender() ! Ack
     }
+    case n : NpmIdentifier => {
+      log.info(s"pushing $n")
+      store(n)
+      sender() ! Ack
+    }
     case h : HermesResults => {
       store(h)
       sender() ! Ack
     }
+//    case herse: HerseResults => {
+//      store(herse)
+//      sender() ! Ack
+//    }
     case x => log.warning("Received unknown message: [{}] ", x)
   }
 
