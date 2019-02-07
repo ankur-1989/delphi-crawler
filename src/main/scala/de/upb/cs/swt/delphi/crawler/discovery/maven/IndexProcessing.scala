@@ -40,6 +40,7 @@ trait IndexProcessing {
       maxRestarts = 20 // limits the amount of restarts to 20
     ) { () => {
       val ir = Try(new MavenIndexReader(base.toURL))
+
       ir match {
         case Success(indexReader) => {
           Source.unfoldResource[MavenIdentifier, MavenIndexReader](
@@ -72,7 +73,7 @@ class MavenIndexReader(base: URL) {
   log.debug(ir.getChunkNames.toString)
 
   lazy val cr = ir.iterator().next().iterator()
-
+ log.info(s"IR Values ${ir.iterator().next().iterator()}")
   def read(): Option[MavenIdentifier] = {
 
     def readInternal(kvp: util.Map[String, String]) = {

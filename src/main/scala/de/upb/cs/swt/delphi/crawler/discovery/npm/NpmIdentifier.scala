@@ -13,15 +13,15 @@ case class NpmIdentifier(val repository: String, val name: String, val version: 
    def toUniqueString = {
      repository + ":" + name + ":" + version
     }
-  def toZipLocation : URI = {
-     constructPackageBaseURI().resolve(encode(name) + "-" + encode(version) + ".tgz")
+  def toGunZipLocation : URI = {
+     constructPackageBaseURI().resolve(encode(name) + "-" +  encode(version) + ".tgz")
 
   }
 
   override val toString: String = name + ":" + version
 
   private def constructPackageBaseURI() : URI =  new URI(repository)
-                                                  .resolve(encode(name) + "/")
+                                                  .resolve(encode(name) + "/" + "-" + "/")
 
 
   private def encode(input : String) : String =

@@ -38,7 +38,7 @@ package object preprocessing {
     * @param url
     */
 
-  case class ZipFile(is: InputStream , url: URL)
+  case class GunZipFile(is: InputStream , url: URL)
 
   /**
     * Used for identification (Pattern matching) of pom file

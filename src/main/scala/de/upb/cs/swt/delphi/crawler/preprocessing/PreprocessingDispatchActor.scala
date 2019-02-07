@@ -23,6 +23,7 @@ import akka.util.Timeout
 import com.sksamuel.elastic4s.http.ElasticClient
 import de.upb.cs.swt.delphi.crawler.Configuration
 import de.upb.cs.swt.delphi.crawler.discovery.maven.MavenIdentifier
+import de.upb.cs.swt.delphi.crawler.discovery.npm.NpmIdentifier
 import de.upb.cs.swt.delphi.crawler.processing.CallGraphStream
 import de.upb.cs.swt.delphi.crawler.storage.ElasticActor
 
@@ -35,6 +36,10 @@ class PreprocessingDispatchActor(configuration : Configuration, nextStep : Actor
     .props(CallGraphStream.props(configuration)))
 
   val downloadActorPool = context.actorOf(SmallestMailboxPool(8).props(MavenDownloadActor.props))
+
+  // Added for Npm packages - Ankur Gupta
+
+  val npmDownloadActorPool = context.actorOf(SmallestMailboxPool(8).props(NpmDownloadActor.props))
 
   override def receive: Receive = {
     case m : MavenIdentifier => {
@@ -53,6 +58,21 @@ class PreprocessingDispatchActor(configuration : Configuration, nextStep : Actor
           case Success(mavenArtifact) => nextStep ! mavenArtifact
           case x => log.error(s"Stuff happened: $x")
         }
+      }
+
+    }
+    case n: NpmIdentifier => {
+      implicit val ec = context.dispatcher
+      elasticPool forward n
+
+      implicit val timeout = Timeout(1 minutes)
+      val f = npmDownloadActorPool ? n
+
+      f.onComplete { result => result match {
+        case Success(npmPackage) =>  nextStep ! npmPackage
+        case x => log.error(s"Some issue with message forwarding to Herse $x")
+      }
+
       }
 
     }

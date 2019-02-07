@@ -20,12 +20,12 @@ class NpmDownloadActor extends Actor with ActorLogging{
 
       val downloader = new HttpDownloader()
 
-      val zipStream = downloader.downloadFromUri(m.toZipLocation.toString())
+      val zipStream = downloader.downloadFromUri(m.toGunZipLocation.toString())
 
       zipStream match {
         case Success(zip) => {
            log.info(s"Downloaded ${m}")
-            sender() ! Success(NpmPackage(m,ZipFile(zip,m.toZipLocation.toURL)))
+            sender() ! Success(NpmPackage(m,GunZipFile(zip,m.toGunZipLocation.toURL)))
         }
         case Failure(e) => {
           log.warning(s"Failed zip download for ${m}")

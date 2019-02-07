@@ -28,7 +28,6 @@ class MavenDownloadActor extends Actor with ActorLogging {
       implicit val system : ActorSystem = context.system
 
       val downloader = new HttpDownloader
-
       val jarStream = downloader.downloadFromUri(m.toJarLocation.toString())
       val pomStream = downloader.downloadFromUri(m.toPomLocation.toString())
 
