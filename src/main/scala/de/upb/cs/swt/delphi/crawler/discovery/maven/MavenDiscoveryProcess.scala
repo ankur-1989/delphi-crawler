@@ -92,7 +92,7 @@ class MavenDiscoveryProcess(configuration: Configuration, elasticPool: ActorRef)
 
 
 
-        val finalizer =
+    val finalizer =
       preprocessing
         .mapAsync(configuration.hermesActorPoolSize)(artifact => (hermesPool ? artifact).mapTo[Try[HermesResults]])
         .filter(results => results.isSuccess)

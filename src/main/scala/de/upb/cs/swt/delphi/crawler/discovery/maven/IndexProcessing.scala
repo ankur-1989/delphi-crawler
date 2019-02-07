@@ -73,7 +73,7 @@ class MavenIndexReader(base: URL) {
   log.debug(ir.getChunkNames.toString)
 
   lazy val cr = ir.iterator().next().iterator()
- log.info(s"IR Values ${ir.iterator().next().iterator()}")
+
   def read(): Option[MavenIdentifier] = {
 
     def readInternal(kvp: util.Map[String, String]) = {

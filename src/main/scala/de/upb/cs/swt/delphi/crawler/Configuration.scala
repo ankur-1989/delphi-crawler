@@ -51,6 +51,8 @@ class Configuration {
   val mavenRepoBase: URI = new URI("http://repo1.maven.org/maven2/") // TODO: Create a local demo server "http://localhost:8881/maven2/"
   val npmRepoBase: URI = new URI("https://registry.npmjs.org/")
 
+  val npmIndexScript =  "/home/ankur/.nvm/versions/node/v10.13.0/lib/node_modules/all-the-package-names/cli.js"
+
 
   val controlServerPort : Int = 8882
 
