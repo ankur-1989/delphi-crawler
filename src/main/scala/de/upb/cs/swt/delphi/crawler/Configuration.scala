@@ -89,6 +89,7 @@ class Configuration {
   val elasticActorPoolSize : Int = 4
   val callGraphStreamPoolSize : Int = 4
   val hermesActorPoolSize: Int = 2
+  val herseActorPoolSize: Int = 2
 
 
 

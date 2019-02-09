@@ -24,7 +24,7 @@ import com.sksamuel.elastic4s.http.{ElasticClient, Response}
 import de.upb.cs.swt.delphi.crawler.discovery.git.GitIdentifier
 import de.upb.cs.swt.delphi.crawler.discovery.maven.MavenIdentifier
 import de.upb.cs.swt.delphi.crawler.discovery.npm.NpmIdentifier
-import de.upb.cs.swt.delphi.crawler.processing.{HermesAnalyzer, HermesResults}
+import de.upb.cs.swt.delphi.crawler.processing.{HermesAnalyzer, HermesResults, HerseResults}
 import org.joda.time.DateTime
 
 /**
@@ -50,7 +50,22 @@ trait ElasticStoreQueries {
     }
   }
 
+ def store(results: HerseResults)(implicit client: ElasticClient, log: LoggingAdapter): Option[Response[UpdateResponse]] ={
 
+   elasticId(results.identifier) match {
+     case Some(value) =>
+        log.info(s"Pushing Herse computed metrics for ${results.identifier} under id ${value}")
+       Some(client.execute {
+         update(value).in(delphiProjectType).doc("herse" -> Map(
+           "features" -> results.featureMap,
+            "version" -> "1.0.0",
+             "runOn" -> DateTime.now()
+         ))
+       }.await)
+     case None => log.warning(s"Tried to push Herse computed metrics for non-existing identifier: ${results.identifier}");None
+   }
+
+ }
 
   def store(g: GitIdentifier)(implicit client: ElasticClient, log: LoggingAdapter): Response[IndexResponse] = {
     log.info("Pushing new git identifier to elastic: [{}]", g)

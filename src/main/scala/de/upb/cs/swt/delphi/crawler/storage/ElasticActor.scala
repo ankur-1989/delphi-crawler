@@ -24,7 +24,7 @@ import de.upb.cs.swt.delphi.crawler.discovery.git.GitIdentifier
 import de.upb.cs.swt.delphi.crawler.tools.ActorStreamIntegrationSignals.{Ack, StreamCompleted, StreamFailure, StreamInitialized}
 import de.upb.cs.swt.delphi.crawler.discovery.maven.MavenIdentifier
 import de.upb.cs.swt.delphi.crawler.discovery.npm.NpmIdentifier
-import de.upb.cs.swt.delphi.crawler.processing.HermesResults
+import de.upb.cs.swt.delphi.crawler.processing.{HermesResults, HerseResults}
 
 /**
   * An actor reacting to item which should be pushed to elasticsearch
@@ -64,10 +64,10 @@ class ElasticActor(client: ElasticClient) extends Actor with ActorLogging
       store(h)
       sender() ! Ack
     }
-//    case herse: HerseResults => {
-//      store(herse)
-//      sender() ! Ack
-//    }
+    case results : HerseResults => {
+      store(results)
+      sender() ! Ack
+    }
     case x => log.warning("Received unknown message: [{}] ", x)
   }
 

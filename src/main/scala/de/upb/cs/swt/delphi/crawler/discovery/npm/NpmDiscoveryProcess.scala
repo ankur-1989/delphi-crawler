@@ -15,6 +15,7 @@ import com.sksamuel.elastic4s.http.ElasticClient
 import de.upb.cs.swt.delphi.crawler.control.Phase
 import de.upb.cs.swt.delphi.crawler.control.Phase.Phase
 import de.upb.cs.swt.delphi.crawler.preprocessing.{NpmDownloadActor, NpmPackage}
+import de.upb.cs.swt.delphi.crawler.processing.{HerseActor, HerseResults}
 import de.upb.cs.swt.delphi.crawler.tools.ActorStreamIntegrationSignals.{Ack, StreamCompleted, StreamFailure, StreamInitialized}
 import de.upb.cs.swt.delphi.crawler.tools.NotYetImplementedException
 import de.upb.cs.swt.delphi.crawler.{AppLogging, Configuration}
@@ -33,7 +34,7 @@ class NpmDiscoveryProcess(configuration:Configuration, elasticPool : ActorRef)(i
   private val seen = mutable.HashSet[NpmIdentifier]()
 
   val downloaderPool = system.actorOf(SmallestMailboxPool(8).props(NpmDownloadActor.props))
-  //var hersePool Todo Need to create herseactor
+  var hersePool = system.actorOf(SmallestMailboxPool(configuration.herseActorPoolSize).props(HerseActor.props()))
 
   override def phase : Phase = Phase.Discovery
 
@@ -65,9 +66,16 @@ class NpmDiscoveryProcess(configuration:Configuration, elasticPool : ActorRef)(i
         .mapAsync(8)(identifier => (downloaderPool ? identifier).mapTo[Try[NpmPackage]])
         .filter(npmpackage => npmpackage.isSuccess)
         .map(npmpackage => npmpackage.get)
-        .to(Sink.ignore)
-        .run()
 
+
+    val computedMetrics =
+      preprocessing
+          .mapAsync(configuration.herseActorPoolSize)(npmPackage => (hersePool ? npmPackage).mapTo[Try[HerseResults]])
+          .filter(results => results.isSuccess)
+          .map(results => results.get)
+          .alsoTo(createSinkFromActorRef[HerseResults](elasticPool))
+          .to(Sink.ignore)
+          .run()
 
     Success(0L)
 

@@ -81,13 +81,13 @@ object Crawler extends App with AppLogging {
 
   val processScheduler = system.actorOf(ProcessScheduler.props)
 
-  // processScheduler ! ProcessScheduler.Enqueue(new MavenDiscoveryProcess(configuration, elasticPool))
+//   processScheduler ! ProcessScheduler.Enqueue(new MavenDiscoveryProcess(configuration, elasticPool))
 
   /** Start the dowloading process of javascript projects
     * @author Ankur Gupta
     */
 
-  processScheduler ! ProcessScheduler.Enqueue(new NpmDiscoveryProcess(configuration,elasticPool))
+ processScheduler ! ProcessScheduler.Enqueue(new NpmDiscoveryProcess(configuration,elasticPool))
 
 
 
