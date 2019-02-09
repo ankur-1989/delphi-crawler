@@ -36,6 +36,7 @@ class MavenDownloadActor extends Actor with ActorLogging {
           pomStream match {
             case Success(pom) => {
               log.info(s"Downloaded $m")
+
               sender() ! Success(MavenArtifact(m, JarFile(jar, m.toJarLocation.toURL), PomFile(pom)))
             }
             case Failure(e) => {
