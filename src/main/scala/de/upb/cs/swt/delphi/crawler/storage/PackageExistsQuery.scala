@@ -1,5 +1,6 @@
 package de.upb.cs.swt.delphi.crawler.storage
 
+import akka.event.LoggingAdapter
 import com.sksamuel.elastic4s.http.{ElasticClient, RequestSuccess}
 import de.upb.cs.swt.delphi.crawler.discovery.npm.NpmIdentifier
 import com.sksamuel.elastic4s.http.search.SearchResponse
@@ -13,9 +14,10 @@ import com.sksamuel.elastic4s.http.ElasticDsl._
 
 trait PackageExistsQuery {
 
-  def exists(identifier: NpmIdentifier)(implicit client: ElasticClient) :Boolean = {
+  def exists(identifier: NpmIdentifier)(implicit client: ElasticClient, log: LoggingAdapter) :Boolean = {
 
     client.execute {
+      log.info(s"checking Npm identifier in elastic Search for ${identifier.toUniqueString}")
       searchWithType(delphiProjectType) query must (
         matchQuery("name",identifier.toUniqueString)
       )

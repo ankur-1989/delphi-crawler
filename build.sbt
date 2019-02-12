@@ -106,3 +106,6 @@ libraryDependencies ++= Seq(
     "com.google.guava" % "guava" % "25.1-jre",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7"
 )
+
+//This library is to handle tarball files
+libraryDependencies += "org.apache.commons" % "commons-compress" % "1.18"

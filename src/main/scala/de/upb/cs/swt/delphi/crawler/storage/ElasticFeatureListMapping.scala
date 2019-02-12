@@ -423,6 +423,11 @@ object ElasticFeatureListMapping {
     "Class File Java 7" -> intField,
     "Class File Java 8" -> intField,
     "Class File Java 9" -> intField,
-    "Ploc" -> intField
+    "Ploc" -> intField,
+    "Sloc" -> intField,
+    "Lloc" -> intField,
+    "SingleLineComments" -> intField,
+    "MultiLineComments" -> intField,
+    "LargeSignatureInFunction" -> intField
   )
 }
