@@ -8,6 +8,7 @@ package de.upb.cs.swt.delphi.crawler.tools
 import java.io.{BufferedInputStream, BufferedOutputStream, File, FileOutputStream}
 import java.net.URL
 
+import de.upb.cs.swt.delphi.crawler.discovery.npm.NpmIdentifier
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.io.FileUtils
@@ -17,12 +18,11 @@ import scala.io.Source
 trait JSFilesHandler {
 
 
-  def createJsRepo(repoBase: String) = {
+  def createJsRepo(npmIdentifier: String, is: BufferedInputStream) = {
 
-    val identifier = repoBase.substring(repoBase.indexOf("org/") + 4, repoBase.indexOf("/", repoBase.indexOf("org/") + 4))
-    val bfFileInputStream = new BufferedInputStream(new URL(repoBase).openStream())
+    val identifier = npmIdentifier.replace(":","-")
 
-    val tarchive = new TarArchiveInputStream(new GzipCompressorInputStream(bfFileInputStream))
+    val tarchive = new TarArchiveInputStream(new GzipCompressorInputStream(is))
     val project = new File(s"src/main/resources/repo/${identifier}/")
     if (!project.exists()) {
       project.mkdir()

@@ -6,7 +6,7 @@ import de.upb.cs.swt.delphi.crawler.preprocessing.NpmPackage
 
 import scala.util.Try
 
-class HerseActor() extends Actor with ActorLogging with HerseFunctionality {
+class HerseActor() extends Actor with ActorLogging with HerseFunctionality  {
 
    def receive: PartialFunction[Any,Unit] =  {
 
