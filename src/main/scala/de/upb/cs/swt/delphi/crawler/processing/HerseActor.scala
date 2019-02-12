@@ -6,14 +6,15 @@ import de.upb.cs.swt.delphi.crawler.preprocessing.NpmPackage
 
 import scala.util.Try
 
-class HerseActor() extends Actor with ActorLogging {
+class HerseActor() extends Actor with ActorLogging with HerseFunctionality {
 
    def receive: PartialFunction[Any,Unit] =  {
 
     case n: NpmPackage => {
       log.info(s"Starting computing metrics for ${n}")
-      val featureMap = Map("Ploc" -> 50)
-      val herseResult = Try{HerseResults(n.identifier,featureMap)}
+      val herseResult = Try{
+                     computeHerseMetrics(n)
+      }
 
       sender() ! herseResult
     }
