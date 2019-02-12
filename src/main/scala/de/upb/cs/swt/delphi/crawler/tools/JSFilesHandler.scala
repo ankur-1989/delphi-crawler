@@ -52,9 +52,9 @@ trait JSFilesHandler {
     tarchive.close()
   }
 
-  def deleteJsRepo(repoBase: String) = {
+  def deleteJsRepo(npmIdentifier: String) = {
 
-    val identifier = repoBase.substring(repoBase.indexOf("org/") + 4, repoBase.indexOf("/", repoBase.indexOf("org/") + 4))
+    val identifier = npmIdentifier.replace(":","-")
     val directory = "src/main/resources/repo/" + identifier + "/"
     val targetFile = new File(directory)
 
@@ -66,11 +66,11 @@ trait JSFilesHandler {
     }
   }
 
-  def getTargetFileContent(repoBase: String): String = {
+  def getTargetFileContent(npmIdentifier: String): String = {
 
-    val identifier = repoBase.substring(repoBase.indexOf("org/") + 4, repoBase.indexOf("/", repoBase.indexOf("org/") + 4))
+    val identifier = npmIdentifier.replace(":","-")
     val directory = "src/main/resources/repo/" + identifier + "/"
-    var targetFile = new File(directory + identifier + ".js")
+    var targetFile = new File(directory + npmIdentifier.substring(0,npmIdentifier.lastIndexOf(":")) + ".js")
     val pattern = """"main":(.*?),""".r
     var content: String = ""
     targetFile.exists() match {
