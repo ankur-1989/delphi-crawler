@@ -66,17 +66,17 @@ trait JSFilesHandler {
     }
   }
 
-  def getTargetFileContent(npmIdentifier: String): String = {
+  def getTargetFile(npmIdentifier: String): String = {
 
     val identifier = npmIdentifier.replace(":","-")
     val directory = "src/main/resources/repo/" + identifier + "/"
     var targetFile = new File(directory + npmIdentifier.substring(0,npmIdentifier.lastIndexOf(":")) + ".js")
     val pattern = """"main":(.*?),""".r
-    var content: String = ""
+    var filePath: String = ""
     targetFile.exists() match {
       case true =>
 
-        content = Source.fromFile(targetFile).getLines().mkString
+        filePath = targetFile.toString
 
       case false => val jsonFile = new File(directory + "package.json")
         val jsonData = Source.fromFile(jsonFile).getLines().mkString
@@ -84,7 +84,7 @@ trait JSFilesHandler {
           case Some(value) => targetFile = new File(directory + value.group(1).substring(value.group(1).lastIndexOf("/") + 1).dropRight(1))
 
             if (targetFile.exists()) {
-              content = Source.fromFile(targetFile).getLines().mkString
+              filePath = targetFile.toString
 
             }
           case None =>
@@ -92,6 +92,6 @@ trait JSFilesHandler {
 
 
     }
-    content
+    filePath
   }
 }

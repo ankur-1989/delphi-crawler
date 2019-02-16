@@ -52,7 +52,7 @@ class Configuration {
   val npmRepoBase: URI = new URI("https://registry.npmjs.org/")
 
   val npmIndexScript =  "/home/ankur/.nvm/versions/node/v10.13.0/lib/node_modules/all-the-package-names/cli.js"
-
+  val parserScript = "src/main/resources/parser.js"
 
   val controlServerPort : Int = 8882
 

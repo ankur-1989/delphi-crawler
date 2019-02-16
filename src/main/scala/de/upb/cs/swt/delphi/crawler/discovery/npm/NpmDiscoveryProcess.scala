@@ -33,6 +33,7 @@ class NpmDiscoveryProcess(configuration:Configuration, elasticPool : ActorRef)(i
 
   private val seen = mutable.HashSet[NpmIdentifier]()
 
+
   val downloaderPool = system.actorOf(SmallestMailboxPool(8).props(NpmDownloadActor.props))
   var hersePool = system.actorOf(SmallestMailboxPool(configuration.herseActorPoolSize).props(HerseActor.props()))
 
@@ -45,6 +46,8 @@ class NpmDiscoveryProcess(configuration:Configuration, elasticPool : ActorRef)(i
 
 
 
+
+
     var filteredSource = createSource(configuration.npmRepoBase,configuration.npmIndexScript)
       .filter(m => {
         val before = seen.contains(m)
@@ -52,7 +55,7 @@ class NpmDiscoveryProcess(configuration:Configuration, elasticPool : ActorRef)(i
         !before
       })
       .filter(m => !exists(m)) // ask elastic
-      .throttle(configuration.throttle.element, configuration.throttle.per, configuration.throttle.maxBurst, configuration.throttle.mode)
+      .throttle(10, configuration.throttle.per, 10, configuration.throttle.mode)
 
     if (configuration.limit > 0) {
       filteredSource = filteredSource.take(configuration.limit)

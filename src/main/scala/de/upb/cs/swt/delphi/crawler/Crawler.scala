@@ -27,9 +27,8 @@ import de.upb.cs.swt.delphi.crawler.instancemanagement.InstanceRegistry
 import de.upb.cs.swt.delphi.crawler.preprocessing.PreprocessingDispatchActor
 import de.upb.cs.swt.delphi.crawler.processing.{HermesActor, HermesAnalyzer, ProcessingDispatchActor}
 import de.upb.cs.swt.delphi.crawler.storage.ElasticActor
-import de.upb.cs.swt.delphi.crawler.tools.OPALLogAdapter
+import de.upb.cs.swt.delphi.crawler.tools.{OPALLogAdapter}
 import org.opalj.log.{GlobalLogContext, OPALLogger}
-
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
@@ -42,6 +41,8 @@ object Crawler extends App with AppLogging {
 
   implicit val system: ActorSystem = ActorSystem("delphi-crawler")
   implicit val materializer = ActorMaterializer()
+
+
 
   OPALLogger.updateLogger(GlobalLogContext, OPALLogAdapter)
   HermesAnalyzer.setConfig()
@@ -86,6 +87,8 @@ object Crawler extends App with AppLogging {
   /** Start the dowloading process of javascript projects
     * @author Ankur Gupta
     */
+
+
 
  processScheduler ! ProcessScheduler.Enqueue(new NpmDiscoveryProcess(configuration,elasticPool))
 

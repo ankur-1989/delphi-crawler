@@ -59,7 +59,7 @@ trait ElasticStoreQueries {
         log.info(s"Pushing Herse computed metrics for ${results.identifier} under id ${value}")
        Some(client.execute {
          update(value).in(delphiProjectType).doc("herse" -> Map(
-           "features" -> results.featureMap,
+           "metrics" -> results.featureMap,
             "version" -> "1.0.0",
              "runOn" -> DateTime.now()
          ))

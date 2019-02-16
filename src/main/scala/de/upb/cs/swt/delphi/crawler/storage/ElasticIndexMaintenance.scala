@@ -32,6 +32,7 @@ trait ElasticIndexMaintenance extends AppLogging {
 
     val client = ElasticClient(configuration.elasticsearchClientUri)
     val featureList = ElasticFeatureListMapping.getMapAsSeq
+    val jsFeaturesList = ElasticJSMetricsListMapping.getMetricsList
 
     val identifierFields = Seq(
       //Git
@@ -64,8 +65,9 @@ trait ElasticIndexMaintenance extends AppLogging {
             textField("methods") analyzer KeywordAnalyzer
           ),
 
-          objectField("features") fields featureList
-        )
+          objectField("features") fields featureList,
+          objectField("metrics") fields jsFeaturesList
+         )
         )
 
     }.await

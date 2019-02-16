@@ -1,0 +1,3663 @@
+{
+	"type": "Program",
+	"body": [{
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "Literal",
+			"value": "use strict",
+			"raw": "\"use strict\""
+		},
+		"directive": "use strict"
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "Compiler"
+			},
+			"init": {
+				"type": "CallExpression",
+				"callee": {
+					"type": "Identifier",
+					"name": "require"
+				},
+				"arguments": [{
+					"type": "Literal",
+					"value": "./Compiler",
+					"raw": "\"./Compiler\""
+				}]
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "MultiCompiler"
+			},
+			"init": {
+				"type": "CallExpression",
+				"callee": {
+					"type": "Identifier",
+					"name": "require"
+				},
+				"arguments": [{
+					"type": "Literal",
+					"value": "./MultiCompiler",
+					"raw": "\"./MultiCompiler\""
+				}]
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "NodeEnvironmentPlugin"
+			},
+			"init": {
+				"type": "CallExpression",
+				"callee": {
+					"type": "Identifier",
+					"name": "require"
+				},
+				"arguments": [{
+					"type": "Literal",
+					"value": "./node/NodeEnvironmentPlugin",
+					"raw": "\"./node/NodeEnvironmentPlugin\""
+				}]
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "WebpackOptionsApply"
+			},
+			"init": {
+				"type": "CallExpression",
+				"callee": {
+					"type": "Identifier",
+					"name": "require"
+				},
+				"arguments": [{
+					"type": "Literal",
+					"value": "./WebpackOptionsApply",
+					"raw": "\"./WebpackOptionsApply\""
+				}]
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "WebpackOptionsDefaulter"
+			},
+			"init": {
+				"type": "CallExpression",
+				"callee": {
+					"type": "Identifier",
+					"name": "require"
+				},
+				"arguments": [{
+					"type": "Literal",
+					"value": "./WebpackOptionsDefaulter",
+					"raw": "\"./WebpackOptionsDefaulter\""
+				}]
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "validateSchema"
+			},
+			"init": {
+				"type": "CallExpression",
+				"callee": {
+					"type": "Identifier",
+					"name": "require"
+				},
+				"arguments": [{
+					"type": "Literal",
+					"value": "./validateSchema",
+					"raw": "\"./validateSchema\""
+				}]
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "WebpackOptionsValidationError"
+			},
+			"init": {
+				"type": "CallExpression",
+				"callee": {
+					"type": "Identifier",
+					"name": "require"
+				},
+				"arguments": [{
+					"type": "Literal",
+					"value": "./WebpackOptionsValidationError",
+					"raw": "\"./WebpackOptionsValidationError\""
+				}]
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "webpackOptionsSchema"
+			},
+			"init": {
+				"type": "CallExpression",
+				"callee": {
+					"type": "Identifier",
+					"name": "require"
+				},
+				"arguments": [{
+					"type": "Literal",
+					"value": "../schemas/WebpackOptions.json",
+					"raw": "\"../schemas/WebpackOptions.json\""
+				}]
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "RemovedPluginError"
+			},
+			"init": {
+				"type": "CallExpression",
+				"callee": {
+					"type": "Identifier",
+					"name": "require"
+				},
+				"arguments": [{
+					"type": "Literal",
+					"value": "./RemovedPluginError",
+					"raw": "\"./RemovedPluginError\""
+				}]
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "version"
+			},
+			"init": {
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "CallExpression",
+					"callee": {
+						"type": "Identifier",
+						"name": "require"
+					},
+					"arguments": [{
+						"type": "Literal",
+						"value": "../package.json",
+						"raw": "\"../package.json\""
+					}]
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "version"
+				}
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "webpack"
+			},
+			"init": {
+				"type": "ArrowFunctionExpression",
+				"id": null,
+				"params": [{
+					"type": "Identifier",
+					"name": "options"
+				}, {
+					"type": "Identifier",
+					"name": "callback"
+				}],
+				"body": {
+					"type": "BlockStatement",
+					"body": [{
+						"type": "VariableDeclaration",
+						"declarations": [{
+							"type": "VariableDeclarator",
+							"id": {
+								"type": "Identifier",
+								"name": "webpackOptionsValidationErrors"
+							},
+							"init": {
+								"type": "CallExpression",
+								"callee": {
+									"type": "Identifier",
+									"name": "validateSchema"
+								},
+								"arguments": [{
+									"type": "Identifier",
+									"name": "webpackOptionsSchema"
+								}, {
+									"type": "Identifier",
+									"name": "options"
+								}]
+							}
+						}],
+						"kind": "const"
+					}, {
+						"type": "IfStatement",
+						"test": {
+							"type": "MemberExpression",
+							"computed": false,
+							"object": {
+								"type": "Identifier",
+								"name": "webpackOptionsValidationErrors"
+							},
+							"property": {
+								"type": "Identifier",
+								"name": "length"
+							}
+						},
+						"consequent": {
+							"type": "BlockStatement",
+							"body": [{
+								"type": "ThrowStatement",
+								"argument": {
+									"type": "NewExpression",
+									"callee": {
+										"type": "Identifier",
+										"name": "WebpackOptionsValidationError"
+									},
+									"arguments": [{
+										"type": "Identifier",
+										"name": "webpackOptionsValidationErrors"
+									}]
+								}
+							}]
+						},
+						"alternate": null
+					}, {
+						"type": "VariableDeclaration",
+						"declarations": [{
+							"type": "VariableDeclarator",
+							"id": {
+								"type": "Identifier",
+								"name": "compiler"
+							},
+							"init": null
+						}],
+						"kind": "let"
+					}, {
+						"type": "IfStatement",
+						"test": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "MemberExpression",
+								"computed": false,
+								"object": {
+									"type": "Identifier",
+									"name": "Array"
+								},
+								"property": {
+									"type": "Identifier",
+									"name": "isArray"
+								}
+							},
+							"arguments": [{
+								"type": "Identifier",
+								"name": "options"
+							}]
+						},
+						"consequent": {
+							"type": "BlockStatement",
+							"body": [{
+								"type": "ExpressionStatement",
+								"expression": {
+									"type": "AssignmentExpression",
+									"operator": "=",
+									"left": {
+										"type": "Identifier",
+										"name": "compiler"
+									},
+									"right": {
+										"type": "NewExpression",
+										"callee": {
+											"type": "Identifier",
+											"name": "MultiCompiler"
+										},
+										"arguments": [{
+											"type": "CallExpression",
+											"callee": {
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "Identifier",
+													"name": "options"
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "map"
+												}
+											},
+											"arguments": [{
+												"type": "ArrowFunctionExpression",
+												"id": null,
+												"params": [{
+													"type": "Identifier",
+													"name": "options"
+												}],
+												"body": {
+													"type": "CallExpression",
+													"callee": {
+														"type": "Identifier",
+														"name": "webpack"
+													},
+													"arguments": [{
+														"type": "Identifier",
+														"name": "options"
+													}]
+												},
+												"generator": false,
+												"expression": true,
+												"async": false
+											}]
+										}]
+									}
+								}
+							}]
+						},
+						"alternate": {
+							"type": "IfStatement",
+							"test": {
+								"type": "BinaryExpression",
+								"operator": "===",
+								"left": {
+									"type": "UnaryExpression",
+									"operator": "typeof",
+									"argument": {
+										"type": "Identifier",
+										"name": "options"
+									},
+									"prefix": true
+								},
+								"right": {
+									"type": "Literal",
+									"value": "object",
+									"raw": "\"object\""
+								}
+							},
+							"consequent": {
+								"type": "BlockStatement",
+								"body": [{
+									"type": "ExpressionStatement",
+									"expression": {
+										"type": "AssignmentExpression",
+										"operator": "=",
+										"left": {
+											"type": "Identifier",
+											"name": "options"
+										},
+										"right": {
+											"type": "CallExpression",
+											"callee": {
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "NewExpression",
+													"callee": {
+														"type": "Identifier",
+														"name": "WebpackOptionsDefaulter"
+													},
+													"arguments": []
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "process"
+												}
+											},
+											"arguments": [{
+												"type": "Identifier",
+												"name": "options"
+											}]
+										}
+									}
+								}, {
+									"type": "ExpressionStatement",
+									"expression": {
+										"type": "AssignmentExpression",
+										"operator": "=",
+										"left": {
+											"type": "Identifier",
+											"name": "compiler"
+										},
+										"right": {
+											"type": "NewExpression",
+											"callee": {
+												"type": "Identifier",
+												"name": "Compiler"
+											},
+											"arguments": [{
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "Identifier",
+													"name": "options"
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "context"
+												}
+											}]
+										}
+									}
+								}, {
+									"type": "ExpressionStatement",
+									"expression": {
+										"type": "AssignmentExpression",
+										"operator": "=",
+										"left": {
+											"type": "MemberExpression",
+											"computed": false,
+											"object": {
+												"type": "Identifier",
+												"name": "compiler"
+											},
+											"property": {
+												"type": "Identifier",
+												"name": "options"
+											}
+										},
+										"right": {
+											"type": "Identifier",
+											"name": "options"
+										}
+									}
+								}, {
+									"type": "ExpressionStatement",
+									"expression": {
+										"type": "CallExpression",
+										"callee": {
+											"type": "MemberExpression",
+											"computed": false,
+											"object": {
+												"type": "NewExpression",
+												"callee": {
+													"type": "Identifier",
+													"name": "NodeEnvironmentPlugin"
+												},
+												"arguments": []
+											},
+											"property": {
+												"type": "Identifier",
+												"name": "apply"
+											}
+										},
+										"arguments": [{
+											"type": "Identifier",
+											"name": "compiler"
+										}]
+									}
+								}, {
+									"type": "IfStatement",
+									"test": {
+										"type": "LogicalExpression",
+										"operator": "&&",
+										"left": {
+											"type": "MemberExpression",
+											"computed": false,
+											"object": {
+												"type": "Identifier",
+												"name": "options"
+											},
+											"property": {
+												"type": "Identifier",
+												"name": "plugins"
+											}
+										},
+										"right": {
+											"type": "CallExpression",
+											"callee": {
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "Identifier",
+													"name": "Array"
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "isArray"
+												}
+											},
+											"arguments": [{
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "Identifier",
+													"name": "options"
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "plugins"
+												}
+											}]
+										}
+									},
+									"consequent": {
+										"type": "BlockStatement",
+										"body": [{
+											"type": "ForOfStatement",
+											"left": {
+												"type": "VariableDeclaration",
+												"declarations": [{
+													"type": "VariableDeclarator",
+													"id": {
+														"type": "Identifier",
+														"name": "plugin"
+													},
+													"init": null
+												}],
+												"kind": "const"
+											},
+											"right": {
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "Identifier",
+													"name": "options"
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "plugins"
+												}
+											},
+											"body": {
+												"type": "BlockStatement",
+												"body": [{
+													"type": "IfStatement",
+													"test": {
+														"type": "BinaryExpression",
+														"operator": "===",
+														"left": {
+															"type": "UnaryExpression",
+															"operator": "typeof",
+															"argument": {
+																"type": "Identifier",
+																"name": "plugin"
+															},
+															"prefix": true
+														},
+														"right": {
+															"type": "Literal",
+															"value": "function",
+															"raw": "\"function\""
+														}
+													},
+													"consequent": {
+														"type": "BlockStatement",
+														"body": [{
+															"type": "ExpressionStatement",
+															"expression": {
+																"type": "CallExpression",
+																"callee": {
+																	"type": "MemberExpression",
+																	"computed": false,
+																	"object": {
+																		"type": "Identifier",
+																		"name": "plugin"
+																	},
+																	"property": {
+																		"type": "Identifier",
+																		"name": "call"
+																	}
+																},
+																"arguments": [{
+																	"type": "Identifier",
+																	"name": "compiler"
+																}, {
+																	"type": "Identifier",
+																	"name": "compiler"
+																}]
+															}
+														}]
+													},
+													"alternate": {
+														"type": "BlockStatement",
+														"body": [{
+															"type": "ExpressionStatement",
+															"expression": {
+																"type": "CallExpression",
+																"callee": {
+																	"type": "MemberExpression",
+																	"computed": false,
+																	"object": {
+																		"type": "Identifier",
+																		"name": "plugin"
+																	},
+																	"property": {
+																		"type": "Identifier",
+																		"name": "apply"
+																	}
+																},
+																"arguments": [{
+																	"type": "Identifier",
+																	"name": "compiler"
+																}]
+															}
+														}]
+													}
+												}]
+											}
+										}]
+									},
+									"alternate": null
+								}, {
+									"type": "ExpressionStatement",
+									"expression": {
+										"type": "CallExpression",
+										"callee": {
+											"type": "MemberExpression",
+											"computed": false,
+											"object": {
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "MemberExpression",
+													"computed": false,
+													"object": {
+														"type": "Identifier",
+														"name": "compiler"
+													},
+													"property": {
+														"type": "Identifier",
+														"name": "hooks"
+													}
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "environment"
+												}
+											},
+											"property": {
+												"type": "Identifier",
+												"name": "call"
+											}
+										},
+										"arguments": []
+									}
+								}, {
+									"type": "ExpressionStatement",
+									"expression": {
+										"type": "CallExpression",
+										"callee": {
+											"type": "MemberExpression",
+											"computed": false,
+											"object": {
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "MemberExpression",
+													"computed": false,
+													"object": {
+														"type": "Identifier",
+														"name": "compiler"
+													},
+													"property": {
+														"type": "Identifier",
+														"name": "hooks"
+													}
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "afterEnvironment"
+												}
+											},
+											"property": {
+												"type": "Identifier",
+												"name": "call"
+											}
+										},
+										"arguments": []
+									}
+								}, {
+									"type": "ExpressionStatement",
+									"expression": {
+										"type": "AssignmentExpression",
+										"operator": "=",
+										"left": {
+											"type": "MemberExpression",
+											"computed": false,
+											"object": {
+												"type": "Identifier",
+												"name": "compiler"
+											},
+											"property": {
+												"type": "Identifier",
+												"name": "options"
+											}
+										},
+										"right": {
+											"type": "CallExpression",
+											"callee": {
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "NewExpression",
+													"callee": {
+														"type": "Identifier",
+														"name": "WebpackOptionsApply"
+													},
+													"arguments": []
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "process"
+												}
+											},
+											"arguments": [{
+												"type": "Identifier",
+												"name": "options"
+											}, {
+												"type": "Identifier",
+												"name": "compiler"
+											}]
+										}
+									}
+								}]
+							},
+							"alternate": {
+								"type": "BlockStatement",
+								"body": [{
+									"type": "ThrowStatement",
+									"argument": {
+										"type": "NewExpression",
+										"callee": {
+											"type": "Identifier",
+											"name": "Error"
+										},
+										"arguments": [{
+											"type": "Literal",
+											"value": "Invalid argument: options",
+											"raw": "\"Invalid argument: options\""
+										}]
+									}
+								}]
+							}
+						}
+					}, {
+						"type": "IfStatement",
+						"test": {
+							"type": "Identifier",
+							"name": "callback"
+						},
+						"consequent": {
+							"type": "BlockStatement",
+							"body": [{
+								"type": "IfStatement",
+								"test": {
+									"type": "BinaryExpression",
+									"operator": "!==",
+									"left": {
+										"type": "UnaryExpression",
+										"operator": "typeof",
+										"argument": {
+											"type": "Identifier",
+											"name": "callback"
+										},
+										"prefix": true
+									},
+									"right": {
+										"type": "Literal",
+										"value": "function",
+										"raw": "\"function\""
+									}
+								},
+								"consequent": {
+									"type": "BlockStatement",
+									"body": [{
+										"type": "ThrowStatement",
+										"argument": {
+											"type": "NewExpression",
+											"callee": {
+												"type": "Identifier",
+												"name": "Error"
+											},
+											"arguments": [{
+												"type": "Literal",
+												"value": "Invalid argument: callback",
+												"raw": "\"Invalid argument: callback\""
+											}]
+										}
+									}]
+								},
+								"alternate": null
+							}, {
+								"type": "IfStatement",
+								"test": {
+									"type": "LogicalExpression",
+									"operator": "||",
+									"left": {
+										"type": "BinaryExpression",
+										"operator": "===",
+										"left": {
+											"type": "MemberExpression",
+											"computed": false,
+											"object": {
+												"type": "Identifier",
+												"name": "options"
+											},
+											"property": {
+												"type": "Identifier",
+												"name": "watch"
+											}
+										},
+										"right": {
+											"type": "Literal",
+											"value": true,
+											"raw": "true"
+										}
+									},
+									"right": {
+										"type": "LogicalExpression",
+										"operator": "&&",
+										"left": {
+											"type": "CallExpression",
+											"callee": {
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "Identifier",
+													"name": "Array"
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "isArray"
+												}
+											},
+											"arguments": [{
+												"type": "Identifier",
+												"name": "options"
+											}]
+										},
+										"right": {
+											"type": "CallExpression",
+											"callee": {
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "Identifier",
+													"name": "options"
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "some"
+												}
+											},
+											"arguments": [{
+												"type": "ArrowFunctionExpression",
+												"id": null,
+												"params": [{
+													"type": "Identifier",
+													"name": "o"
+												}],
+												"body": {
+													"type": "MemberExpression",
+													"computed": false,
+													"object": {
+														"type": "Identifier",
+														"name": "o"
+													},
+													"property": {
+														"type": "Identifier",
+														"name": "watch"
+													}
+												},
+												"generator": false,
+												"expression": true,
+												"async": false
+											}]
+										}
+									}
+								},
+								"consequent": {
+									"type": "BlockStatement",
+									"body": [{
+										"type": "VariableDeclaration",
+										"declarations": [{
+											"type": "VariableDeclarator",
+											"id": {
+												"type": "Identifier",
+												"name": "watchOptions"
+											},
+											"init": {
+												"type": "ConditionalExpression",
+												"test": {
+													"type": "CallExpression",
+													"callee": {
+														"type": "MemberExpression",
+														"computed": false,
+														"object": {
+															"type": "Identifier",
+															"name": "Array"
+														},
+														"property": {
+															"type": "Identifier",
+															"name": "isArray"
+														}
+													},
+													"arguments": [{
+														"type": "Identifier",
+														"name": "options"
+													}]
+												},
+												"consequent": {
+													"type": "CallExpression",
+													"callee": {
+														"type": "MemberExpression",
+														"computed": false,
+														"object": {
+															"type": "Identifier",
+															"name": "options"
+														},
+														"property": {
+															"type": "Identifier",
+															"name": "map"
+														}
+													},
+													"arguments": [{
+														"type": "ArrowFunctionExpression",
+														"id": null,
+														"params": [{
+															"type": "Identifier",
+															"name": "o"
+														}],
+														"body": {
+															"type": "LogicalExpression",
+															"operator": "||",
+															"left": {
+																"type": "MemberExpression",
+																"computed": false,
+																"object": {
+																	"type": "Identifier",
+																	"name": "o"
+																},
+																"property": {
+																	"type": "Identifier",
+																	"name": "watchOptions"
+																}
+															},
+															"right": {
+																"type": "ObjectExpression",
+																"properties": []
+															}
+														},
+														"generator": false,
+														"expression": true,
+														"async": false
+													}]
+												},
+												"alternate": {
+													"type": "LogicalExpression",
+													"operator": "||",
+													"left": {
+														"type": "MemberExpression",
+														"computed": false,
+														"object": {
+															"type": "Identifier",
+															"name": "options"
+														},
+														"property": {
+															"type": "Identifier",
+															"name": "watchOptions"
+														}
+													},
+													"right": {
+														"type": "ObjectExpression",
+														"properties": []
+													}
+												}
+											}
+										}],
+										"kind": "const"
+									}, {
+										"type": "ReturnStatement",
+										"argument": {
+											"type": "CallExpression",
+											"callee": {
+												"type": "MemberExpression",
+												"computed": false,
+												"object": {
+													"type": "Identifier",
+													"name": "compiler"
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "watch"
+												}
+											},
+											"arguments": [{
+												"type": "Identifier",
+												"name": "watchOptions"
+											}, {
+												"type": "Identifier",
+												"name": "callback"
+											}]
+										}
+									}]
+								},
+								"alternate": null
+							}, {
+								"type": "ExpressionStatement",
+								"expression": {
+									"type": "CallExpression",
+									"callee": {
+										"type": "MemberExpression",
+										"computed": false,
+										"object": {
+											"type": "Identifier",
+											"name": "compiler"
+										},
+										"property": {
+											"type": "Identifier",
+											"name": "run"
+										}
+									},
+									"arguments": [{
+										"type": "Identifier",
+										"name": "callback"
+									}]
+								}
+							}]
+						},
+						"alternate": null
+					}, {
+						"type": "ReturnStatement",
+						"argument": {
+							"type": "Identifier",
+							"name": "compiler"
+						}
+					}]
+				},
+				"generator": false,
+				"expression": false,
+				"async": false
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "AssignmentExpression",
+			"operator": "=",
+			"left": {
+				"type": "Identifier",
+				"name": "exports"
+			},
+			"right": {
+				"type": "AssignmentExpression",
+				"operator": "=",
+				"left": {
+					"type": "MemberExpression",
+					"computed": false,
+					"object": {
+						"type": "Identifier",
+						"name": "module"
+					},
+					"property": {
+						"type": "Identifier",
+						"name": "exports"
+					}
+				},
+				"right": {
+					"type": "Identifier",
+					"name": "webpack"
+				}
+			}
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "AssignmentExpression",
+			"operator": "=",
+			"left": {
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "Identifier",
+					"name": "exports"
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "version"
+				}
+			},
+			"right": {
+				"type": "Identifier",
+				"name": "version"
+			}
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "AssignmentExpression",
+			"operator": "=",
+			"left": {
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "Identifier",
+					"name": "webpack"
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "WebpackOptionsDefaulter"
+				}
+			},
+			"right": {
+				"type": "Identifier",
+				"name": "WebpackOptionsDefaulter"
+			}
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "AssignmentExpression",
+			"operator": "=",
+			"left": {
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "Identifier",
+					"name": "webpack"
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "WebpackOptionsApply"
+				}
+			},
+			"right": {
+				"type": "Identifier",
+				"name": "WebpackOptionsApply"
+			}
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "AssignmentExpression",
+			"operator": "=",
+			"left": {
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "Identifier",
+					"name": "webpack"
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "Compiler"
+				}
+			},
+			"right": {
+				"type": "Identifier",
+				"name": "Compiler"
+			}
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "AssignmentExpression",
+			"operator": "=",
+			"left": {
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "Identifier",
+					"name": "webpack"
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "MultiCompiler"
+				}
+			},
+			"right": {
+				"type": "Identifier",
+				"name": "MultiCompiler"
+			}
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "AssignmentExpression",
+			"operator": "=",
+			"left": {
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "Identifier",
+					"name": "webpack"
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "NodeEnvironmentPlugin"
+				}
+			},
+			"right": {
+				"type": "Identifier",
+				"name": "NodeEnvironmentPlugin"
+			}
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "AssignmentExpression",
+			"operator": "=",
+			"left": {
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "Identifier",
+					"name": "webpack"
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "validate"
+				}
+			},
+			"right": {
+				"type": "CallExpression",
+				"callee": {
+					"type": "MemberExpression",
+					"computed": false,
+					"object": {
+						"type": "Identifier",
+						"name": "validateSchema"
+					},
+					"property": {
+						"type": "Identifier",
+						"name": "bind"
+					}
+				},
+				"arguments": [{
+					"type": "ThisExpression"
+				}, {
+					"type": "Identifier",
+					"name": "webpackOptionsSchema"
+				}]
+			}
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "AssignmentExpression",
+			"operator": "=",
+			"left": {
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "Identifier",
+					"name": "webpack"
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "validateSchema"
+				}
+			},
+			"right": {
+				"type": "Identifier",
+				"name": "validateSchema"
+			}
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "AssignmentExpression",
+			"operator": "=",
+			"left": {
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "Identifier",
+					"name": "webpack"
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "WebpackOptionsValidationError"
+				}
+			},
+			"right": {
+				"type": "Identifier",
+				"name": "WebpackOptionsValidationError"
+			}
+		}
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "exportPlugins"
+			},
+			"init": {
+				"type": "ArrowFunctionExpression",
+				"id": null,
+				"params": [{
+					"type": "Identifier",
+					"name": "obj"
+				}, {
+					"type": "Identifier",
+					"name": "mappings"
+				}],
+				"body": {
+					"type": "BlockStatement",
+					"body": [{
+						"type": "ForOfStatement",
+						"left": {
+							"type": "VariableDeclaration",
+							"declarations": [{
+								"type": "VariableDeclarator",
+								"id": {
+									"type": "Identifier",
+									"name": "name"
+								},
+								"init": null
+							}],
+							"kind": "const"
+						},
+						"right": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "MemberExpression",
+								"computed": false,
+								"object": {
+									"type": "Identifier",
+									"name": "Object"
+								},
+								"property": {
+									"type": "Identifier",
+									"name": "keys"
+								}
+							},
+							"arguments": [{
+								"type": "Identifier",
+								"name": "mappings"
+							}]
+						},
+						"body": {
+							"type": "BlockStatement",
+							"body": [{
+								"type": "ExpressionStatement",
+								"expression": {
+									"type": "CallExpression",
+									"callee": {
+										"type": "MemberExpression",
+										"computed": false,
+										"object": {
+											"type": "Identifier",
+											"name": "Object"
+										},
+										"property": {
+											"type": "Identifier",
+											"name": "defineProperty"
+										}
+									},
+									"arguments": [{
+										"type": "Identifier",
+										"name": "obj"
+									}, {
+										"type": "Identifier",
+										"name": "name"
+									}, {
+										"type": "ObjectExpression",
+										"properties": [{
+											"type": "Property",
+											"key": {
+												"type": "Identifier",
+												"name": "configurable"
+											},
+											"computed": false,
+											"value": {
+												"type": "Literal",
+												"value": false,
+												"raw": "false"
+											},
+											"kind": "init",
+											"method": false,
+											"shorthand": false
+										}, {
+											"type": "Property",
+											"key": {
+												"type": "Identifier",
+												"name": "enumerable"
+											},
+											"computed": false,
+											"value": {
+												"type": "Literal",
+												"value": true,
+												"raw": "true"
+											},
+											"kind": "init",
+											"method": false,
+											"shorthand": false
+										}, {
+											"type": "Property",
+											"key": {
+												"type": "Identifier",
+												"name": "get"
+											},
+											"computed": false,
+											"value": {
+												"type": "MemberExpression",
+												"computed": true,
+												"object": {
+													"type": "Identifier",
+													"name": "mappings"
+												},
+												"property": {
+													"type": "Identifier",
+													"name": "name"
+												}
+											},
+											"kind": "init",
+											"method": false,
+											"shorthand": false
+										}]
+									}]
+								}
+							}]
+						}
+					}]
+				},
+				"generator": false,
+				"expression": false,
+				"async": false
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "CallExpression",
+			"callee": {
+				"type": "Identifier",
+				"name": "exportPlugins"
+			},
+			"arguments": [{
+				"type": "Identifier",
+				"name": "exports"
+			}, {
+				"type": "ObjectExpression",
+				"properties": [{
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "AutomaticPrefetchPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./AutomaticPrefetchPlugin",
+								"raw": "\"./AutomaticPrefetchPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "BannerPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./BannerPlugin",
+								"raw": "\"./BannerPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "CachePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./CachePlugin",
+								"raw": "\"./CachePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "ContextExclusionPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./ContextExclusionPlugin",
+								"raw": "\"./ContextExclusionPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "ContextReplacementPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./ContextReplacementPlugin",
+								"raw": "\"./ContextReplacementPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "DefinePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./DefinePlugin",
+								"raw": "\"./DefinePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "Dependency"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./Dependency",
+								"raw": "\"./Dependency\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "DllPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./DllPlugin",
+								"raw": "\"./DllPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "DllReferencePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./DllReferencePlugin",
+								"raw": "\"./DllReferencePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "EnvironmentPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./EnvironmentPlugin",
+								"raw": "\"./EnvironmentPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "EvalDevToolModulePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./EvalDevToolModulePlugin",
+								"raw": "\"./EvalDevToolModulePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "EvalSourceMapDevToolPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./EvalSourceMapDevToolPlugin",
+								"raw": "\"./EvalSourceMapDevToolPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "ExtendedAPIPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./ExtendedAPIPlugin",
+								"raw": "\"./ExtendedAPIPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "ExternalsPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./ExternalsPlugin",
+								"raw": "\"./ExternalsPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "HashedModuleIdsPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./HashedModuleIdsPlugin",
+								"raw": "\"./HashedModuleIdsPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "HotModuleReplacementPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./HotModuleReplacementPlugin",
+								"raw": "\"./HotModuleReplacementPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "IgnorePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./IgnorePlugin",
+								"raw": "\"./IgnorePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "LibraryTemplatePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./LibraryTemplatePlugin",
+								"raw": "\"./LibraryTemplatePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "LoaderOptionsPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./LoaderOptionsPlugin",
+								"raw": "\"./LoaderOptionsPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "LoaderTargetPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./LoaderTargetPlugin",
+								"raw": "\"./LoaderTargetPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "MemoryOutputFileSystem"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./MemoryOutputFileSystem",
+								"raw": "\"./MemoryOutputFileSystem\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "Module"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./Module",
+								"raw": "\"./Module\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "ModuleFilenameHelpers"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./ModuleFilenameHelpers",
+								"raw": "\"./ModuleFilenameHelpers\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "NamedChunksPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./NamedChunksPlugin",
+								"raw": "\"./NamedChunksPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "NamedModulesPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./NamedModulesPlugin",
+								"raw": "\"./NamedModulesPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "NoEmitOnErrorsPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./NoEmitOnErrorsPlugin",
+								"raw": "\"./NoEmitOnErrorsPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "NormalModuleReplacementPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./NormalModuleReplacementPlugin",
+								"raw": "\"./NormalModuleReplacementPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "PrefetchPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./PrefetchPlugin",
+								"raw": "\"./PrefetchPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "ProgressPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./ProgressPlugin",
+								"raw": "\"./ProgressPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "ProvidePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./ProvidePlugin",
+								"raw": "\"./ProvidePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "SetVarMainTemplatePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./SetVarMainTemplatePlugin",
+								"raw": "\"./SetVarMainTemplatePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "SingleEntryPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./SingleEntryPlugin",
+								"raw": "\"./SingleEntryPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "SourceMapDevToolPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./SourceMapDevToolPlugin",
+								"raw": "\"./SourceMapDevToolPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "Stats"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./Stats",
+								"raw": "\"./Stats\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "Template"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./Template",
+								"raw": "\"./Template\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "UmdMainTemplatePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./UmdMainTemplatePlugin",
+								"raw": "\"./UmdMainTemplatePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "WatchIgnorePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./WatchIgnorePlugin",
+								"raw": "\"./WatchIgnorePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}]
+			}]
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "CallExpression",
+			"callee": {
+				"type": "Identifier",
+				"name": "exportPlugins"
+			},
+			"arguments": [{
+				"type": "AssignmentExpression",
+				"operator": "=",
+				"left": {
+					"type": "MemberExpression",
+					"computed": false,
+					"object": {
+						"type": "Identifier",
+						"name": "exports"
+					},
+					"property": {
+						"type": "Identifier",
+						"name": "dependencies"
+					}
+				},
+				"right": {
+					"type": "ObjectExpression",
+					"properties": []
+				}
+			}, {
+				"type": "ObjectExpression",
+				"properties": [{
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "DependencyReference"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./dependencies/DependencyReference",
+								"raw": "\"./dependencies/DependencyReference\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}]
+			}]
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "CallExpression",
+			"callee": {
+				"type": "Identifier",
+				"name": "exportPlugins"
+			},
+			"arguments": [{
+				"type": "AssignmentExpression",
+				"operator": "=",
+				"left": {
+					"type": "MemberExpression",
+					"computed": false,
+					"object": {
+						"type": "Identifier",
+						"name": "exports"
+					},
+					"property": {
+						"type": "Identifier",
+						"name": "optimize"
+					}
+				},
+				"right": {
+					"type": "ObjectExpression",
+					"properties": []
+				}
+			}, {
+				"type": "ObjectExpression",
+				"properties": [{
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "AggressiveMergingPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/AggressiveMergingPlugin",
+								"raw": "\"./optimize/AggressiveMergingPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "AggressiveSplittingPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/AggressiveSplittingPlugin",
+								"raw": "\"./optimize/AggressiveSplittingPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "ChunkModuleIdRangePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/ChunkModuleIdRangePlugin",
+								"raw": "\"./optimize/ChunkModuleIdRangePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "LimitChunkCountPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/LimitChunkCountPlugin",
+								"raw": "\"./optimize/LimitChunkCountPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "MinChunkSizePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/MinChunkSizePlugin",
+								"raw": "\"./optimize/MinChunkSizePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "ModuleConcatenationPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/ModuleConcatenationPlugin",
+								"raw": "\"./optimize/ModuleConcatenationPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "OccurrenceOrderPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/OccurrenceOrderPlugin",
+								"raw": "\"./optimize/OccurrenceOrderPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "OccurrenceModuleOrderPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/OccurrenceModuleOrderPlugin",
+								"raw": "\"./optimize/OccurrenceModuleOrderPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "OccurrenceChunkOrderPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/OccurrenceChunkOrderPlugin",
+								"raw": "\"./optimize/OccurrenceChunkOrderPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "RuntimeChunkPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/RuntimeChunkPlugin",
+								"raw": "\"./optimize/RuntimeChunkPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "SideEffectsFlagPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/SideEffectsFlagPlugin",
+								"raw": "\"./optimize/SideEffectsFlagPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "SplitChunksPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./optimize/SplitChunksPlugin",
+								"raw": "\"./optimize/SplitChunksPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}]
+			}]
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "CallExpression",
+			"callee": {
+				"type": "Identifier",
+				"name": "exportPlugins"
+			},
+			"arguments": [{
+				"type": "AssignmentExpression",
+				"operator": "=",
+				"left": {
+					"type": "MemberExpression",
+					"computed": false,
+					"object": {
+						"type": "Identifier",
+						"name": "exports"
+					},
+					"property": {
+						"type": "Identifier",
+						"name": "web"
+					}
+				},
+				"right": {
+					"type": "ObjectExpression",
+					"properties": []
+				}
+			}, {
+				"type": "ObjectExpression",
+				"properties": [{
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "FetchCompileWasmTemplatePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./web/FetchCompileWasmTemplatePlugin",
+								"raw": "\"./web/FetchCompileWasmTemplatePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "JsonpTemplatePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./web/JsonpTemplatePlugin",
+								"raw": "\"./web/JsonpTemplatePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}]
+			}]
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "CallExpression",
+			"callee": {
+				"type": "Identifier",
+				"name": "exportPlugins"
+			},
+			"arguments": [{
+				"type": "AssignmentExpression",
+				"operator": "=",
+				"left": {
+					"type": "MemberExpression",
+					"computed": false,
+					"object": {
+						"type": "Identifier",
+						"name": "exports"
+					},
+					"property": {
+						"type": "Identifier",
+						"name": "webworker"
+					}
+				},
+				"right": {
+					"type": "ObjectExpression",
+					"properties": []
+				}
+			}, {
+				"type": "ObjectExpression",
+				"properties": [{
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "WebWorkerTemplatePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./webworker/WebWorkerTemplatePlugin",
+								"raw": "\"./webworker/WebWorkerTemplatePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}]
+			}]
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "CallExpression",
+			"callee": {
+				"type": "Identifier",
+				"name": "exportPlugins"
+			},
+			"arguments": [{
+				"type": "AssignmentExpression",
+				"operator": "=",
+				"left": {
+					"type": "MemberExpression",
+					"computed": false,
+					"object": {
+						"type": "Identifier",
+						"name": "exports"
+					},
+					"property": {
+						"type": "Identifier",
+						"name": "node"
+					}
+				},
+				"right": {
+					"type": "ObjectExpression",
+					"properties": []
+				}
+			}, {
+				"type": "ObjectExpression",
+				"properties": [{
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "NodeTemplatePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./node/NodeTemplatePlugin",
+								"raw": "\"./node/NodeTemplatePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}, {
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "ReadFileCompileWasmTemplatePlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./node/ReadFileCompileWasmTemplatePlugin",
+								"raw": "\"./node/ReadFileCompileWasmTemplatePlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}]
+			}]
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "CallExpression",
+			"callee": {
+				"type": "Identifier",
+				"name": "exportPlugins"
+			},
+			"arguments": [{
+				"type": "AssignmentExpression",
+				"operator": "=",
+				"left": {
+					"type": "MemberExpression",
+					"computed": false,
+					"object": {
+						"type": "Identifier",
+						"name": "exports"
+					},
+					"property": {
+						"type": "Identifier",
+						"name": "debug"
+					}
+				},
+				"right": {
+					"type": "ObjectExpression",
+					"properties": []
+				}
+			}, {
+				"type": "ObjectExpression",
+				"properties": [{
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "ProfilingPlugin"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./debug/ProfilingPlugin",
+								"raw": "\"./debug/ProfilingPlugin\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}]
+			}]
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "CallExpression",
+			"callee": {
+				"type": "Identifier",
+				"name": "exportPlugins"
+			},
+			"arguments": [{
+				"type": "AssignmentExpression",
+				"operator": "=",
+				"left": {
+					"type": "MemberExpression",
+					"computed": false,
+					"object": {
+						"type": "Identifier",
+						"name": "exports"
+					},
+					"property": {
+						"type": "Identifier",
+						"name": "util"
+					}
+				},
+				"right": {
+					"type": "ObjectExpression",
+					"properties": []
+				}
+			}, {
+				"type": "ObjectExpression",
+				"properties": [{
+					"type": "Property",
+					"key": {
+						"type": "Identifier",
+						"name": "createHash"
+					},
+					"computed": false,
+					"value": {
+						"type": "ArrowFunctionExpression",
+						"id": null,
+						"params": [],
+						"body": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "Identifier",
+								"name": "require"
+							},
+							"arguments": [{
+								"type": "Literal",
+								"value": "./util/createHash",
+								"raw": "\"./util/createHash\""
+							}]
+						},
+						"generator": false,
+						"expression": true,
+						"async": false
+					},
+					"kind": "init",
+					"method": false,
+					"shorthand": false
+				}]
+			}]
+		}
+	}, {
+		"type": "VariableDeclaration",
+		"declarations": [{
+			"type": "VariableDeclarator",
+			"id": {
+				"type": "Identifier",
+				"name": "defineMissingPluginError"
+			},
+			"init": {
+				"type": "ArrowFunctionExpression",
+				"id": null,
+				"params": [{
+					"type": "Identifier",
+					"name": "namespace"
+				}, {
+					"type": "Identifier",
+					"name": "pluginName"
+				}, {
+					"type": "Identifier",
+					"name": "errorMessage"
+				}],
+				"body": {
+					"type": "BlockStatement",
+					"body": [{
+						"type": "ExpressionStatement",
+						"expression": {
+							"type": "CallExpression",
+							"callee": {
+								"type": "MemberExpression",
+								"computed": false,
+								"object": {
+									"type": "Identifier",
+									"name": "Object"
+								},
+								"property": {
+									"type": "Identifier",
+									"name": "defineProperty"
+								}
+							},
+							"arguments": [{
+								"type": "Identifier",
+								"name": "namespace"
+							}, {
+								"type": "Identifier",
+								"name": "pluginName"
+							}, {
+								"type": "ObjectExpression",
+								"properties": [{
+									"type": "Property",
+									"key": {
+										"type": "Identifier",
+										"name": "configurable"
+									},
+									"computed": false,
+									"value": {
+										"type": "Literal",
+										"value": false,
+										"raw": "false"
+									},
+									"kind": "init",
+									"method": false,
+									"shorthand": false
+								}, {
+									"type": "Property",
+									"key": {
+										"type": "Identifier",
+										"name": "enumerable"
+									},
+									"computed": false,
+									"value": {
+										"type": "Literal",
+										"value": true,
+										"raw": "true"
+									},
+									"kind": "init",
+									"method": false,
+									"shorthand": false
+								}, {
+									"type": "Property",
+									"key": {
+										"type": "Identifier",
+										"name": "get"
+									},
+									"computed": false,
+									"value": {
+										"type": "FunctionExpression",
+										"id": null,
+										"params": [],
+										"body": {
+											"type": "BlockStatement",
+											"body": [{
+												"type": "ThrowStatement",
+												"argument": {
+													"type": "NewExpression",
+													"callee": {
+														"type": "Identifier",
+														"name": "RemovedPluginError"
+													},
+													"arguments": [{
+														"type": "Identifier",
+														"name": "errorMessage"
+													}]
+												}
+											}]
+										},
+										"generator": false,
+										"expression": false,
+										"async": false
+									},
+									"kind": "init",
+									"method": true,
+									"shorthand": false
+								}]
+							}]
+						}
+					}]
+				},
+				"generator": false,
+				"expression": false,
+				"async": false
+			}
+		}],
+		"kind": "const"
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "CallExpression",
+			"callee": {
+				"type": "Identifier",
+				"name": "defineMissingPluginError"
+			},
+			"arguments": [{
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "Identifier",
+					"name": "exports"
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "optimize"
+				}
+			}, {
+				"type": "Literal",
+				"value": "UglifyJsPlugin",
+				"raw": "\"UglifyJsPlugin\""
+			}, {
+				"type": "Literal",
+				"value": "webpack.optimize.UglifyJsPlugin has been removed, please use config.optimization.minimize instead.",
+				"raw": "\"webpack.optimize.UglifyJsPlugin has been removed, please use config.optimization.minimize instead.\""
+			}]
+		}
+	}, {
+		"type": "ExpressionStatement",
+		"expression": {
+			"type": "CallExpression",
+			"callee": {
+				"type": "Identifier",
+				"name": "defineMissingPluginError"
+			},
+			"arguments": [{
+				"type": "MemberExpression",
+				"computed": false,
+				"object": {
+					"type": "Identifier",
+					"name": "exports"
+				},
+				"property": {
+					"type": "Identifier",
+					"name": "optimize"
+				}
+			}, {
+				"type": "Literal",
+				"value": "CommonsChunkPlugin",
+				"raw": "\"CommonsChunkPlugin\""
+			}, {
+				"type": "Literal",
+				"value": "webpack.optimize.CommonsChunkPlugin has been removed, please use config.optimization.splitChunks instead.",
+				"raw": "\"webpack.optimize.CommonsChunkPlugin has been removed, please use config.optimization.splitChunks instead.\""
+			}]
+		}
+	}],
+	"sourceType": "script",
+	"comments": [{
+		"type": "Block",
+		"value": "\n\tMIT License http://www.opensource.org/licenses/mit-license.php\n\tAuthor Tobias Koppers @sokra\n"
+	}, {
+		"type": "Block",
+		"value": "* @typedef {import(\"../declarations/WebpackOptions\").WebpackOptions} WebpackOptions "
+	}, {
+		"type": "Block",
+		"value": "*\n * @param {WebpackOptions} options options object\n * @param {function(Error=, Stats=): void=} callback callback\n * @returns {Compiler | MultiCompiler} the compiler object\n "
+	}, {
+		"type": "Line",
+		"value": " @ts-ignore Global @this directive is not supported"
+	}, {
+		"type": "Line",
+		"value": " TODO remove in webpack 5"
+	}, {
+		"type": "Line",
+		"value": " TODO remove in webpack 5"
+	}]
+}

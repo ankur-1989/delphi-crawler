@@ -18,7 +18,7 @@ name := "delphi-crawler"
 
 version := "1.0.0-SNAPSHOT"
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.8"
 
 lazy val crawler = (project in file(".")).
   enablePlugins(JavaAppPackaging).
@@ -109,3 +109,5 @@ libraryDependencies ++= Seq(
 
 //This library is to handle tarball files
 libraryDependencies += "org.apache.commons" % "commons-compress" % "1.18"
+
+libraryDependencies += "com.lihaoyi" %% "upickle" % "0.7.1"
