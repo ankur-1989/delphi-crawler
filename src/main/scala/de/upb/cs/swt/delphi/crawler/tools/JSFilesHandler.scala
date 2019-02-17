@@ -34,13 +34,17 @@ trait JSFilesHandler {
 
       if (!tarEntry.isDirectory) {
         pattern.findFirstMatchIn(tarEntry.getName) match {
-          case Some(value) => val newFile = new File(s"src/main/resources/repo/${identifier}/" + value.toString().substring(value.toString().lastIndexOf("/") + 1))
-            val bfos = new BufferedOutputStream(new FileOutputStream(newFile))
-            val content = new Array[Byte](tarEntry.getSize.toInt)
-            var len = tarchive.read(content, 0, tarEntry.getSize.toInt)
+          case Some(value) =>
+            val directory = new File(s"src/main/resources/repo/${identifier}/"+ value.toString().substring(0,value.toString().lastIndexOf("/")+1))
+            if(!directory.exists()) {
+              directory.mkdirs()
+            }
+            val bfos = new BufferedOutputStream(new FileOutputStream(new File( directory + "/" + value.toString().substring(value.toString().lastIndexOf("/")+1))))
+            val buf = new Array[Byte](tarEntry.getSize.toInt)
+            var len = tarchive.read(buf, 0, tarEntry.getSize.toInt)
             while (len != -1) {
-              bfos.write(content, 0, len)
-              len = tarchive.read(content, 0, content.length - 0)
+              bfos.write(buf,  0, len)
+              len = tarchive.read(buf, 0, buf.length-0)
             }
             bfos.close()
           case None =>
@@ -59,39 +63,61 @@ trait JSFilesHandler {
     val targetFile = new File(directory)
 
     (targetFile.exists() && targetFile.isDirectory) match {
-      case true => println(targetFile.toString)
+      case true =>
         FileUtils.deleteDirectory(targetFile)
 
       case false =>
     }
   }
 
+
+  def checkFiles(f: File): Array[File] = {
+    val these = f.listFiles
+    these ++ these.filter(_.isDirectory).flatMap(checkFiles)
+  }
+
+
   def getTargetFile(npmIdentifier: String): String = {
 
+
     val identifier = npmIdentifier.replace(":","-")
-    val directory = "src/main/resources/repo/" + identifier + "/"
-    var targetFile = new File(directory + npmIdentifier.substring(0,npmIdentifier.lastIndexOf(":")) + ".js")
+    val directory = "src/main/resources/repo/" + identifier + "/" + "package/"
     val pattern = """"main":(.*?),""".r
-    var filePath: String = ""
-    targetFile.exists() match {
-      case true =>
+    var targetFile = new File("")
+    val jsonFile = new File(directory + "package.json")
+    val jsonData = Source.fromFile(jsonFile).getLines().mkString
+    pattern.findFirstMatchIn(jsonData) match {
+      case Some(value) =>  val fileName = value.group(1).substring(0).replaceAll("\"","").trim
+        targetFile = new File(directory + fileName.substring(if(fileName.lastIndexOf("/") < 0) 0 else fileName.lastIndexOf("/")+1))
 
-        filePath = targetFile.toString
-
-      case false => val jsonFile = new File(directory + "package.json")
-        val jsonData = Source.fromFile(jsonFile).getLines().mkString
-        pattern.findFirstMatchIn(jsonData) match {
-          case Some(value) => targetFile = new File(directory + value.group(1).substring(value.group(1).lastIndexOf("/") + 1).dropRight(1))
-
-            if (targetFile.exists()) {
-              filePath = targetFile.toString
-
-            }
-          case None =>
+        if (!targetFile.toString.endsWith(".js")) {
+          targetFile = new File(targetFile.toString + ".js")
         }
+        if (!targetFile.exists()) {
+          val it = checkFiles(new File(directory))
+            .toList.filter(_.toString.contains(targetFile.toString.substring(targetFile.toString.lastIndexOf("/")+1))).iterator
+          if(it.nonEmpty) {
+            it.reduceLeft((x,y) => if(x.length() > y.length()) x else y) match {
+              case file: File => targetFile = file
+            }
+          }
+        }
+      case None =>
+    }
+
+    val it = checkFiles(new File(directory))
+      .toList.filter(_.toString.contains(npmIdentifier.substring(0,npmIdentifier.indexOf(":"))+".js") == true).iterator
+    if (it.nonEmpty) {
+      it.reduceLeft((x, y) => if (x.length() > y.length()) x else y) match {
+        case file: File => if (!targetFile.toString.equals(file)) {
+          targetFile = if (targetFile.length() > file.length()) targetFile else file
+
+        }
+
+      }
 
 
     }
-    filePath
+    targetFile.toString
   }
 }

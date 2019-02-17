@@ -11,7 +11,7 @@ import com.sksamuel.elastic4s.http.ElasticDsl._
 trait PackageIdentityQuery {
   def elasticId(identifier : NpmIdentifier)(implicit client : ElasticClient, log: LoggingAdapter) : Option[String] = {
     client.execute {
-      log.info(s"checking npm package before updating herse results for ${identifier.toUniqueString}")
+
       searchWithType(delphiProjectType) query must(
         matchQuery("name", identifier.toUniqueString)
       )

@@ -7,27 +7,42 @@ import de.upb.cs.swt.delphi.crawler.Herse.HerseCore
 import de.upb.cs.swt.delphi.crawler.preprocessing.NpmPackage
 import de.upb.cs.swt.delphi.crawler.tools.JSFilesHandler
 
-trait HerseFunctionality extends JSFilesHandler{
-
+trait HerseFunctionality extends JSFilesHandler {
 
 
   def computeHerseResults(p: NpmPackage)(implicit log: LoggingAdapter): HerseResults = {
 
-    log.info("Starting Herse Metrics computation process")
+
+    var results = Map[String, Int]()
+
+
+      try{
+        createJsRepo(p.identifier.toString, new BufferedInputStream(p.zipFile.is))
+
+        log.info(s"SOURCE FILE ${p.identifier.toString}")
+
+        val sourceFile = getTargetFile(p.identifier.toString)
 
 
 
-    createJsRepo(p.identifier.toString,new BufferedInputStream(p.zipFile.is))
+        if (!sourceFile.isEmpty) {
+
+
+          results = HerseCore.computeJSMetrics(getTargetFile(p.identifier.toString))
+
+        }
+      } catch {
+        case unknownError: UnknownError => log.error(s"${unknownError.printStackTrace()}")
+          deleteJsRepo(p.identifier.toString)
+      } finally {
+        deleteJsRepo(p.identifier.toString)
+      }
 
 
 
-    val results = HerseCore.computeJSMetrics(getTargetFile(p.identifier.toString))
-
-    deleteJsRepo(p.identifier.toString)
-
-    new HerseResults(p.identifier,results)
 
 
+    new HerseResults(p.identifier, results)
 
   }
 

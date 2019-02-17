@@ -53,8 +53,7 @@ trait ElasticStoreQueries {
  def store(results: HerseResults)(implicit client: ElasticClient, log: LoggingAdapter): Option[Response[UpdateResponse]] ={
 
    val id = elasticId(results.identifier)
-   log.info(s"Identifier matched in elastic search ${id}")
-    id match {
+   id match {
      case Some(value) =>
         log.info(s"Pushing Herse computed metrics for ${results.identifier} under id ${value}")
        Some(client.execute {

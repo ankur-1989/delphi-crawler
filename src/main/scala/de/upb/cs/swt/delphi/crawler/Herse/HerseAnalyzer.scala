@@ -49,6 +49,30 @@ class HerseAnalyzer(jsonAst: String) extends HerseFeatures with Dynamic {
     result
   }
 
+  def computeFunctionsCount : Future[Map[String,Int]] = Future {
+
+    val jsonObject = JsonMethods.parse(jsonAst)
+    val functionsCount = getElement("type",jsonObject)
+    functionsCount.asInstanceOf[List[String]].groupBy(identity).mapValues(_.size).get("FunctionDeclaration") match {
+      case Some(value) => NoOfFunctionsDeclarations = NoOfFunctionsDeclarations + value
+      case None =>
+    }
+
+    functionsCount.asInstanceOf[List[String]].groupBy(identity).mapValues(_.size).get("FunctionExpression") match {
+      case Some(value) => NoOfFunctionsDeclarations = NoOfFunctionsDeclarations + value
+      case None =>
+    }
+
+    functionsCount.asInstanceOf[List[String]].groupBy(identity).mapValues(_.size).get("ArrowFunctionExpression") match {
+      case Some(value) => NoOfFunctionsDeclarations = NoOfFunctionsDeclarations + value
+      case None =>
+    }
+
+
+    Map("NoOfFunctionsDeclarations" -> NoOfFunctionsDeclarations)
+
+  }
+
 
 
   def getElement(elem: String , json: JValue) = for {

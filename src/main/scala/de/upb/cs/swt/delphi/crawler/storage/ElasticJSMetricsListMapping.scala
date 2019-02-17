@@ -20,7 +20,8 @@ object ElasticJSMetricsListMapping {
     "Lloc" -> intField,
     "SingleLineComments" -> intField,
     "MultiLineComments" -> intField,
-    "LargeSignatureInFunction" -> intField
+    "LargeSignatureInFunction" -> intField,
+    "NoOfFunctionsDeclarations" -> intField
   )
 
 }

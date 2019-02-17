@@ -55,7 +55,7 @@ class NpmDiscoveryProcess(configuration:Configuration, elasticPool : ActorRef)(i
         !before
       })
       .filter(m => !exists(m)) // ask elastic
-      .throttle(10, configuration.throttle.per, 10, configuration.throttle.mode)
+      .throttle(configuration.throttle.element, configuration.throttle.per, configuration.throttle.maxBurst, configuration.throttle.mode)
 
     if (configuration.limit > 0) {
       filteredSource = filteredSource.take(configuration.limit)

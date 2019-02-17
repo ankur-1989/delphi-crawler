@@ -20,12 +20,13 @@ object HerseCore {
 
     val futureComments = analyzer.computeCountComments
     val futureLOC = analyzer.computeLOC(sourceFile)
+    val futureFunctionsCount = analyzer.computeFunctionsCount
 
-    val totalFeatures = futureLOC.zip(futureComments)
-    val features = Await.result(totalFeatures,5.seconds)
+    val totalFeatures = futureFunctionsCount.zip(futureLOC.zip(futureComments))
+    val features = Await.result(totalFeatures,10.seconds)
 
-    log.info(s"Features MAP ->  ${features._1 ++ features._2}")
-    features._1 ++ features._2
+    log.info(s"Features MAP for ${sourceFile} ->  ${features._1 ++ features._2._1 ++ features._2._2}")
+    features._1 ++ features._1 ++ features._2._1 ++ features._2._2
 
 
   }
