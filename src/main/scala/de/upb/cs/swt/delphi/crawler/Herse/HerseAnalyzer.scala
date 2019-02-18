@@ -16,7 +16,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 
 
-class HerseAnalyzer(jsonAst: String) extends HerseFeatures with Dynamic {
+class HerseAnalyzer(jsonAst: String) extends HerseFeatures with Dynamic with AstTraverse {
 
   implicit val formats = DefaultFormats
 
@@ -73,6 +73,14 @@ class HerseAnalyzer(jsonAst: String) extends HerseFeatures with Dynamic {
 
   }
 
+  def computeLargestSignature(node: Any) : Future[Map[String,Int]]  = Future {
+
+
+    checkParams(node.asInstanceOf[JValue])
+
+    Map("LargestSignatureInFunction" -> LargestSignatureInFunction)
+
+  }
 
 
   def getElement(elem: String , json: JValue) = for {
