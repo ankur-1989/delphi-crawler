@@ -13,7 +13,7 @@ trait HerseFunctionality extends JSFilesHandler {
   def computeHerseResults(p: NpmPackage)(implicit log: LoggingAdapter): HerseResults = {
 
 
-    var results = Map[String, Int]()
+    var results = Map[String, Any]()
 
 
       try{

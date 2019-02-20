@@ -35,6 +35,6 @@ object HerseActor {
 
 }
 
-case class HerseResults(identifier: NpmIdentifier, featureMap: Map[String, Int])
+case class HerseResults(identifier: NpmIdentifier, featureMap: Map[String, Any])
 
 

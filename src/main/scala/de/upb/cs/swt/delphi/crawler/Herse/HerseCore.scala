@@ -9,7 +9,7 @@ import scala.concurrent.Await
 import sys.process._
 object HerseCore {
 
-  def computeJSMetrics(sourceFile: String)(implicit log: LoggingAdapter) : Map[String,Int] = {
+  def computeJSMetrics(sourceFile: String)(implicit log: LoggingAdapter) : Map[String,Any] = {
 
 
 
@@ -18,16 +18,20 @@ object HerseCore {
 
     val jsonObject = JsonMethods.parse(jsonAST)
     val analyzer = new HerseAnalyzer(jsonAST)
-
+    val hm = new HalsteadMetrics(jsonObject)
     val futureComments = analyzer.computeCountComments
     val futureLOC = analyzer.computeLOC(sourceFile)
     val futureFunctionsCount = analyzer.computeFunctionsCount
     val futureLargestSignature = analyzer.computeLargestSignature(jsonObject)
-    val totalFeatures = futureLargestSignature.zip(futureFunctionsCount.zip(futureLOC.zip(futureComments)))
-    val features = Await.result(totalFeatures,10.seconds)
+    val futureHalsteadMetrics = hm.computeHalsteadMetrics()
 
-    log.info(s"Features MAP for ${sourceFile} ->  ${features._1 ++ features._2._1 ++ features._2._2._1 ++ features._2._2._2}")
-    features._1 ++ features._1 ++ features._2._1 ++ features._2._2._1 ++ features._2._2._2
+    val sizeFeatures  =    Await.result(futureLOC.zip(futureComments),10.seconds)
+    val functionFeatures = Await.result(futureLargestSignature.zip(futureFunctionsCount),15.seconds)
+    val halsteadFeatures = Await.result(futureHalsteadMetrics,10.seconds)
+
+    log.info(s"Features Map ->  ${sizeFeatures._2 ++ sizeFeatures._1 ++ functionFeatures._1 ++ functionFeatures._2 ++ halsteadFeatures}")
+    sizeFeatures._2 ++ sizeFeatures._1 ++ functionFeatures._1 ++ functionFeatures._2 ++ halsteadFeatures
+
 
 
   }

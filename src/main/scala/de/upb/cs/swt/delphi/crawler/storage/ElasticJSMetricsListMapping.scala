@@ -21,7 +21,16 @@ object ElasticJSMetricsListMapping {
     "SingleLineComments" -> intField,
     "MultiLineComments" -> intField,
     "LargeSignatureInFunction" -> intField,
-    "NoOfFunctionsDeclarations" -> intField
+    "NoOfFunctionsDeclarations" -> intField,
+    "TotalNoOfOperators" -> doubleField,
+    "TotalNoOfOperands" -> doubleField,
+    "NoOfUniqueOperators" -> doubleField,
+    "NoOfUniqueOperands" -> doubleField,
+    "HalsteadProgramLength" -> doubleField,
+    "HalsteadProgramVolume" -> doubleField,
+    "HalsteadProgramEffort" -> doubleField,
+    "HalsteadDifficulty" -> doubleField,
+    "MaintainabilityIndex" -> doubleField
   )
 
 }

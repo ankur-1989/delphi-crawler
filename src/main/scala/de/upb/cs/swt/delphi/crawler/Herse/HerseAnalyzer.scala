@@ -20,7 +20,7 @@ class HerseAnalyzer(jsonAst: String) extends HerseFeatures with Dynamic with Ast
 
   implicit val formats = DefaultFormats
 
-  def computeCountComments : Future[Map[String,Int]] = Future {
+  def computeCountComments : Future[Map[String,Any]] = Future {
 
       val jsonObject = JsonMethods.parse(jsonAst)
     (jsonObject \ "comments").toOption match {
@@ -42,14 +42,14 @@ class HerseAnalyzer(jsonAst: String) extends HerseFeatures with Dynamic with Ast
       results
   }
 
-  def computeLOC(sourceFile: String) : Future[Map[String, Int]] = Future {
+  def computeLOC(sourceFile: String) : Future[Map[String, Any]] = Future {
 
         val sourceCode = scala.io.Source.fromFile(sourceFile).mkString
         val result = Map("Ploc" -> sourceCode.count(_ == '\n'))
     result
   }
 
-  def computeFunctionsCount : Future[Map[String,Int]] = Future {
+  def computeFunctionsCount : Future[Map[String,Any]] = Future {
 
     val jsonObject = JsonMethods.parse(jsonAst)
     val functionsCount = getElement("type",jsonObject)
@@ -73,7 +73,7 @@ class HerseAnalyzer(jsonAst: String) extends HerseFeatures with Dynamic with Ast
 
   }
 
-  def computeLargestSignature(node: Any) : Future[Map[String,Int]]  = Future {
+  def computeLargestSignature(node: Any) : Future[Map[String,Any]]  = Future {
 
 
     checkParams(node.asInstanceOf[JValue])
@@ -83,9 +83,6 @@ class HerseAnalyzer(jsonAst: String) extends HerseFeatures with Dynamic with Ast
   }
 
 
-  def getElement(elem: String , json: JValue) = for {
-    JObject(child) <- json
-    JField(`elem`,JString(value)) <-  child
-  } yield value
+
 
 }
