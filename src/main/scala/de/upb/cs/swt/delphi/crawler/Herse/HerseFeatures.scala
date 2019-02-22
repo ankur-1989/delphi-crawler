@@ -21,4 +21,10 @@ trait HerseFeatures {
   var HalsteadProgramEffort: Double = 0
   var HalsteadDifficulty : Double = 0
 
+  //ECMAScript Compliant Features
+  var ES2018Compliant : Boolean = false
+  var ES2017Compliant : Boolean = false
+  var ES2016Compliant : Boolean = false
+  var ES2015Compliant : Boolean = false
+
 }

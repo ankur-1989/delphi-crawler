@@ -30,6 +30,12 @@ object ElasticJSMetricsListMapping {
     "HalsteadProgramVolume" -> doubleField,
     "HalsteadProgramEffort" -> doubleField,
     "HalsteadDifficulty" -> doubleField,
+    "MaintainabilityIndex" -> doubleField,
+    "ES2018Compliant" -> booleanField,
+    "ES2017Compliant" -> booleanField,
+    "ES2016Compliant" -> booleanField,
+    "ES2015Compliant" -> booleanField,
+    "CyclomaticComplexity" -> doubleField,
     "MaintainabilityIndex" -> doubleField
   )
 

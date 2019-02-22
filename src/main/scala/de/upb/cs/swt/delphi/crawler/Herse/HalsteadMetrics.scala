@@ -1,6 +1,8 @@
 package de.upb.cs.swt.delphi.crawler.Herse
 
-import org.json4s.JValue
+import org.json4s
+import org.json4s.JsonAST.JObject
+import org.json4s.{JField, JValue}
 
 import scala.concurrent.Future
 import scala.math.{BigDecimal, log10}
@@ -20,10 +22,16 @@ class HalsteadMetrics(jsonAst: JValue) extends HerseFeatures with AstTraverse {
       case None =>
     }
 
-    (jsonAst \ "body" \ "declarations").toOption match {
-      case Some(value) => value.children.iterator.foreach(f => checkOperands(f))
-      case None =>
-    }
+    getVariables("declarations",jsonAst).asInstanceOf[List[Any]].iterator.foreach( f => f match {
+        case obj: List[Any] => obj.foreach(o => o match {
+        case JObject(v) => if(v.nonEmpty && v.isInstanceOf[List[JField]]) {
+          val variableMap = v.toMap
+          if(variableMap.get("type").get.values.equals("VariableDeclarator")){
+            listUniqueOperands =  (variableMap.get("id").get.values).asInstanceOf[Map[String,String]].get("name").get :: listUniqueOperands
+          }
+        }
+      })
+    })
 
 
     NoOfUniqueOperands = listUniqueOperands.groupBy(identity).mapValues(_.size).size
@@ -48,7 +56,8 @@ class HalsteadMetrics(jsonAst: JValue) extends HerseFeatures with AstTraverse {
     HalsteadProgramVolume = BigDecimal(HalsteadProgramLength * log2(NoOfUniqueOperands + NoOfUniqueOperators)).setScale(2,BigDecimal.RoundingMode.HALF_UP).toDouble
     HalsteadDifficulty = BigDecimal((NoOfUniqueOperators * TotalNoOfOperands)/ (2*NoOfUniqueOperands)).setScale(2,BigDecimal.RoundingMode.HALF_UP).toDouble
     HalsteadProgramEffort =  BigDecimal( HalsteadDifficulty * HalsteadProgramVolume).setScale(2,BigDecimal.RoundingMode.HALF_UP).toDouble
-    Map("TotalNoOfOerands" -> TotalNoOfOperands,  "TotalNoOfOperators" -> TotalNoOfOperators,
+    Map("TotalNoOfOperands" -> TotalNoOfOperands,  "TotalNoOfOperators" -> TotalNoOfOperators, "NoOfUniqueOperators" -> NoOfUniqueOperators,
+      "NoOfUniqueOperands" -> NoOfUniqueOperands,
       "HalsteadProgramLength" -> HalsteadProgramLength , "HalsteadProgramVolume" -> HalsteadProgramVolume , "HalsteadDifficulty" -> HalsteadDifficulty,
       "HalsteadProgramEffort" -> HalsteadProgramEffort)
   }
