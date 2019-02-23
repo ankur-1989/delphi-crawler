@@ -10,6 +10,8 @@ trait HerseFeatures {
   var Ploc = 0
   var NoOfFunctionsDeclarations = 0
   var LargestSignatureInFunction = 0
+  var NoofStatementsInLargestFunction = 0
+  var AvgNoOfStatementsInFunction = 0
 
   // Halstead Metrics
   var TotalNoOfOperators: Double = 0
@@ -26,5 +28,13 @@ trait HerseFeatures {
   var ES2017Compliant : Boolean = false
   var ES2016Compliant : Boolean = false
   var ES2015Compliant : Boolean = false
+
+  //Cyclomatic complexity
+  var CyclomaticComplexity : Double = 0
+  var MaintainabilityIndex: Double = 0
+
+  //Fan -In FanOut Feature
+  var FanIn : Double = 0
+  var FanOut: Double = 0
 
 }

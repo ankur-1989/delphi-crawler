@@ -1,14 +1,28 @@
+
+/**
+  * @author Ankur Gupta
+  */
+
+
 package de.upb.cs.swt.delphi.crawler.Herse
 
 import org.json4s
 import org.json4s.{JArray, JNothing, JNull, JValue, JsonAST}
 import org.json4s.JsonAST.{JField, JObject, JString, JValue}
 
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
+
 
 trait AstTraverse extends HerseFeatures {
 
 
   var listUniqueOperands : List[String] = List()
+  var functionsMap = scala.collection.mutable.Map[Int, String]()
+  var functionIndexMap = scala.collection.mutable.Map[Int,Int]()
+  var functionStatementsMap : Map[Int, List[String]] = Map()
+  var mapFunctionStatements = scala.collection.mutable.Map[Int, Int]()
+  var index = -1
 
   def checkParams(node: JValue) : Any = {
 
@@ -36,6 +50,71 @@ trait AstTraverse extends HerseFeatures {
     JObject(child) <- json
     JField(`elem`,JArray(arr)) <-  child
   } yield arr
+
+
+  def getFunctionIndexes(code: String, pattern : String): Unit = {
+
+    if (code.nonEmpty) {
+
+
+      index = code.indexOf(pattern, index + 1)
+      if (index >=0 && pattern.contains("FunctionExpression")) {
+        functionsMap += (index -> "FunctionExpression")
+
+        getFunctionIndexes(code, pattern)
+      } else if (index>=0 && pattern.contains("FunctionDeclaration")) {
+        functionsMap += (index -> "FunctionDeclaration")
+        getFunctionIndexes(code, pattern)
+      } else if(index>=0 && pattern.contains("ArrowFunctionExpression")) {
+        functionsMap += (index -> "ArrowFunctionExpression")
+        getFunctionIndexes(code, pattern)
+      }
+
+    }
+
+
+  }
+
+  def findClosingIndex(ast: String , startingIndex : Int) : Unit  = {
+
+
+    var closingIndex = mutable.Stack[Int]()
+    var i = startingIndex
+
+    while (i < ast.length) {
+
+
+      if(ast.charAt(i).equals('{')) {
+
+        closingIndex.push(ast.charAt(i).asInstanceOf[Int])
+      } else if (ast.charAt(i).equals('}')) {
+        closingIndex.pop()
+        if(closingIndex.isEmpty) {
+
+          functionIndexMap += (startingIndex -> i)
+          return
+        }
+      }
+      i= i+1
+    }
+
+  }
+
+
+  def getStatements(startIndex: Int, endIndex: Int, ast: String) = {
+    val pattern = """"type":(.*?),""".r
+
+    var statementList = new  ListBuffer[String]()
+
+    pattern.findAllIn(ast).matchData foreach( m =>
+    {
+      if(!m.group(1).contains("BlockStatement") && !m.group(1).contains("FunctionDeclaration")) {
+        statementList += m.group(1).toString
+      }})
+
+    functionStatementsMap = functionStatementsMap ++ Map( startIndex -> statementList.toList)
+
+  }
 
 
 }

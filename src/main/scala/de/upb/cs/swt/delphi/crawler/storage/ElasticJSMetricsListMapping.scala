@@ -36,7 +36,9 @@ object ElasticJSMetricsListMapping {
     "ES2016Compliant" -> booleanField,
     "ES2015Compliant" -> booleanField,
     "CyclomaticComplexity" -> doubleField,
-    "MaintainabilityIndex" -> doubleField
+    "MaintainabilityIndex" -> doubleField,
+    "NoofStatementsInLargestFunction" -> intField,
+    "AvgNoOfStatementsInFunction" -> intField
   )
 
 }
