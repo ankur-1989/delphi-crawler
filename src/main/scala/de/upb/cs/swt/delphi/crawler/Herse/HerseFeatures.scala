@@ -30,7 +30,8 @@ trait HerseFeatures {
   var ES2015Compliant : Boolean = false
 
   //Cyclomatic complexity
-  var CyclomaticComplexity : Double = 0
+  var HighestCyclomaticComplexity : Double = 0
+  var AvgCyclomaticComplexity : Double = 0
   var MaintainabilityIndex: Double = 0
 
   //Fan -In FanOut Feature
