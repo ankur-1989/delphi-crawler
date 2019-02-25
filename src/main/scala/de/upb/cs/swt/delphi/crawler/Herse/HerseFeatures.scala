@@ -35,7 +35,9 @@ trait HerseFeatures {
   var MaintainabilityIndex: Double = 0
 
   //Fan -In FanOut Feature
-  var FanIn : Double = 0
-  var FanOut: Double = 0
+  var HighestFanIn : Int = 0
+  var HighestFanOut: Int = 0
+  var AvgFanOut: Double = 0
+  var AvgFanIn : Double = 0
 
 }

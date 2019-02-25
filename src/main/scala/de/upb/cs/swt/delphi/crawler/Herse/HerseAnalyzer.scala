@@ -88,9 +88,9 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
   def computeFunctionStatements = {
 
 
-    getFunctionIndexes(jsonAst,"{\"type\":\"FunctionDeclaration\"")
-    getFunctionIndexes(jsonAst,"{\"type\":\"FunctionExpression\"")
-    getFunctionIndexes(jsonAst,"{\"type\":\"ArrowFunctionExpression\"")
+    getObjectIndexes(jsonAst,"{\"type\":\"FunctionDeclaration\"")
+    getObjectIndexes(jsonAst,"{\"type\":\"FunctionExpression\"")
+    getObjectIndexes(jsonAst,"{\"type\":\"ArrowFunctionExpression\"")
 
     for((k,v) <- functionsMap) {
       findClosingIndex(jsonAst,k)
@@ -134,9 +134,9 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
   def computeCC() {
 
     var mapFunctionsCC = scala.collection.mutable.Map[Int,Int]()
-    getFunctionIndexes(jsonAst,"{\"type\":\"FunctionDeclaration\"")
-    getFunctionIndexes(jsonAst,"{\"type\":\"FunctionExpression\"")
-    getFunctionIndexes(jsonAst,"{\"type\":\"ArrowFunctionExpression\"")
+    getObjectIndexes(jsonAst,"{\"type\":\"FunctionDeclaration\"")
+    getObjectIndexes(jsonAst,"{\"type\":\"FunctionExpression\"")
+    getObjectIndexes(jsonAst,"{\"type\":\"ArrowFunctionExpression\"")
 
     for((k,v) <- functionsMap) {
       findClosingIndex(jsonAst,k)

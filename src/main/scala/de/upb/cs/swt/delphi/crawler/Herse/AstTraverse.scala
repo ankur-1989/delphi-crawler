@@ -52,7 +52,7 @@ trait AstTraverse extends HerseFeatures {
   } yield arr
 
 
-  def getFunctionIndexes(code: String, pattern : String): Unit = {
+  def getObjectIndexes(code: String, pattern : String): Unit = {
 
     if (code.nonEmpty) {
 
@@ -61,13 +61,19 @@ trait AstTraverse extends HerseFeatures {
       if (index >=0 && pattern.contains("FunctionExpression")) {
         functionsMap += (index -> "FunctionExpression")
 
-        getFunctionIndexes(code, pattern)
+        getObjectIndexes(code, pattern)
       } else if (index>=0 && pattern.contains("FunctionDeclaration")) {
         functionsMap += (index -> "FunctionDeclaration")
-        getFunctionIndexes(code, pattern)
+        getObjectIndexes(code, pattern)
       } else if(index>=0 && pattern.contains("ArrowFunctionExpression")) {
         functionsMap += (index -> "ArrowFunctionExpression")
-        getFunctionIndexes(code, pattern)
+        getObjectIndexes(code, pattern)
+      } else if (index >0 && pattern.contains("AssignmentExpression")) {
+        functionsMap += (index -> "AssignmentExpression")
+        getObjectIndexes(code,pattern)
+      } else if (index >0 && pattern.contains("VariableDeclarator")) {
+        functionsMap += (index -> "VariableDeclarator")
+        getObjectIndexes(code,pattern)
       }
 
     }
@@ -75,7 +81,7 @@ trait AstTraverse extends HerseFeatures {
 
   }
 
-  def findClosingIndex(ast: String , startingIndex : Int) : Unit  = {
+  def findClosingIndex(ast: String , startingIndex : Int): Int  = {
 
 
     var closingIndex = mutable.Stack[Int]()
@@ -92,12 +98,12 @@ trait AstTraverse extends HerseFeatures {
         if(closingIndex.isEmpty) {
 
           functionIndexMap += (startingIndex -> i)
-          return
+          return i
         }
       }
       i= i+1
     }
-
+    return -1
   }
 
 
