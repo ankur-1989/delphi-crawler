@@ -19,7 +19,9 @@ trait AstTraverse extends HerseFeatures {
 
   var listUniqueOperands : List[String] = List()
   var functionsMap = scala.collection.mutable.Map[Int, String]()
+  var commentsMap = scala.collection.mutable.Map[Int, String]()
   var functionIndexMap = scala.collection.mutable.Map[Int,Int]()
+  var commentsIndexMap = scala.collection.mutable.Map[Int,Int]()
   var functionStatementsMap : Map[Int, List[String]] = Map()
   var mapFunctionStatements = scala.collection.mutable.Map[Int, Int]()
   var index = -1
@@ -74,6 +76,9 @@ trait AstTraverse extends HerseFeatures {
       } else if (index >0 && pattern.contains("VariableDeclarator")) {
         functionsMap += (index -> "VariableDeclarator")
         getObjectIndexes(code,pattern)
+      } else if (index >0 && pattern.contains("Block")) {
+        commentsMap += (index -> "Block")
+        getObjectIndexes(code,pattern)
       }
 
     }
@@ -81,7 +86,7 @@ trait AstTraverse extends HerseFeatures {
 
   }
 
-  def findClosingIndex(ast: String , startingIndex : Int): Int  = {
+  def findClosingIndex(ast: String , startingIndex : Int, obj: String): Int  = {
 
 
     var closingIndex = mutable.Stack[Int]()
@@ -97,7 +102,10 @@ trait AstTraverse extends HerseFeatures {
         closingIndex.pop()
         if(closingIndex.isEmpty) {
 
-          functionIndexMap += (startingIndex -> i)
+          if(!obj.equals("Block")){
+            functionIndexMap += (startingIndex -> i)
+          }
+
           return i
         }
       }

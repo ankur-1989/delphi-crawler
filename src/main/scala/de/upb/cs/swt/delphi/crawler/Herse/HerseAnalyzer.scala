@@ -11,6 +11,8 @@ package de.upb.cs.swt.delphi.crawler.Herse
 
 import org.json4s.JsonAST.{JObject, JValue}
 import org.json4s._
+import org.json4s.jackson.JsonMethods
+import sys.process._
 import scala.collection.immutable.ListMap
 import scala.language.dynamics
 import scala.concurrent.Future
@@ -46,9 +48,32 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
 
   def computeLOC = {
 
-    val sourceCode =  scala.io.Source.fromFile(sourceFile).mkString
-    Ploc  = sourceCode.count(_ == '\n')
+    var count = 0
+    val bufferedSource = scala.io.Source.fromFile(sourceFile)
+    val loc: Boolean = true
+    var countBlockC = 0
+    val ast = (s"node src/main/resources/parser.js ${sourceFile} ${loc}".!!).toString
+    getObjectIndexes(ast,"{\"type\":\"Block\"")
+    for ( (k,v) <- commentsMap) {
+      if(v.contains("Block")) {
+        val closingIndex = findClosingIndex(ast, k,"Block")
+        val end = JsonMethods.parse(ast.substring(k, closingIndex + 1)).extract[BlockComment].loc.end.line
+        val start  = JsonMethods.parse(ast.substring(k, closingIndex + 1)).extract[BlockComment].loc.start.line
+        if (end > start) countBlockC += (end-start)+1 else 1
+      }
+    }
 
+
+    for(line <- bufferedSource.getLines()) {
+      Ploc += 1
+      if(line.trim.matches("") || line.trim.matches("//.*"))  {
+        count+= 1
+
+      }
+    }
+    bufferedSource.close()
+
+    Ploc = Ploc - count - countBlockC
 
   }
 
@@ -93,7 +118,7 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
     getObjectIndexes(jsonAst,"{\"type\":\"ArrowFunctionExpression\"")
 
     for((k,v) <- functionsMap) {
-      findClosingIndex(jsonAst,k)
+      findClosingIndex(jsonAst,k,"Function")
     }
 
     for((k,v) <- functionIndexMap) {
@@ -139,7 +164,7 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
     getObjectIndexes(jsonAst,"{\"type\":\"ArrowFunctionExpression\"")
 
     for((k,v) <- functionsMap) {
-      findClosingIndex(jsonAst,k)
+      findClosingIndex(jsonAst,k,"Function")
     }
 
     val pattern = """"type":(.*?),""".r
@@ -186,7 +211,11 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
 
   def computeMI() = {
 
-    MaintainabilityIndex = scala.math.max(0,(171 - 5.2 * log2(if(HalsteadProgramVolume>0)  HalsteadProgramVolume else 1) - 0.23 * (AvgCyclomaticComplexity) - 16.2 * log2(Ploc))*100/171)
+    val averageLOC = if(NoOfFunctionsDeclarations > 0) Ploc/NoOfFunctionsDeclarations else Ploc
+
+    MaintainabilityIndex = 171 - (3.42 * scala.math.log(if(HalsteadProgramEffort>0)  HalsteadProgramEffort else 1)) - (0.23 * scala.math.log(AvgCyclomaticComplexity)) - (16.2 * scala.math.log(averageLOC))
+    if (MaintainabilityIndex > 171) MaintainabilityIndex =171
+    // else MaintainabilityIndex = scala.math.max(0, (MaintainabilityIndex * 100)/171 )
   }
 
   def computeTotalOperands()  = {

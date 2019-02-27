@@ -67,5 +67,19 @@ package object Herse {
                                          `type`: String,
                                          name : String
                                        )
+  case class BlockComment(
+                           `type` : String,
+                           value: String,
+                           loc: LOC
+                         )
+  case class LOC (
+                   start: Position,
+                   end: Position
+
+                 )
+  case class Position (
+                        line: Int,
+                        column: Int
+                      )
 
 }

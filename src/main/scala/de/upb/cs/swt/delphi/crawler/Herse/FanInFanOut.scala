@@ -27,7 +27,7 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
     for ((k, v) <- functionsMap) {
 
 
-      val closingIndex = findClosingIndex(ast, k)
+      val closingIndex = findClosingIndex(ast, k,"Function")
       val obj = parse(ast.substring(k, closingIndex + 1))
       if (closingIndex > 0 && v.contains("AssignmentExpression")) {
 

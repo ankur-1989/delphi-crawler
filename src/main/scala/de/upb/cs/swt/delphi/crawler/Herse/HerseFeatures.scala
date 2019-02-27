@@ -34,7 +34,7 @@ trait HerseFeatures {
   var AvgCyclomaticComplexity : Double = 0
   var MaintainabilityIndex: Double = 0
 
-  //Fan -In FanOut Feature
+  //Fan-In FanOut Feature
   var HighestFanIn : Int = 0
   var HighestFanOut: Int = 0
   var AvgFanOut: Double = 0
