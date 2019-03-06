@@ -38,7 +38,18 @@ object ElasticJSMetricsListMapping {
     "CyclomaticComplexity" -> doubleField,
     "MaintainabilityIndex" -> doubleField,
     "NoofStatementsInLargestFunction" -> intField,
-    "AvgNoOfStatementsInFunction" -> intField
+    "AvgNoOfStatementsInFunction" -> intField,
+    "HighestFanIn" -> intField,
+    "HighestFanOut" -> intField,
+    "AvgFanOut" -> doubleField,
+    "AvgFanIn" -> doubleField,
+    "NoOfObjects" -> intField,
+    "NoOfPropertiesInLargestObject" -> intField,
+    "AvgNoOfPropertiesPerObject" -> intField,
+    "LargestCognitiveComplexity" -> doubleField,
+    "AvgCognitiveComplexity" -> doubleField,
+    "LongestCallingChain" -> doubleField,
+    "AvgCallingChain" -> doubleField
   )
 
 }

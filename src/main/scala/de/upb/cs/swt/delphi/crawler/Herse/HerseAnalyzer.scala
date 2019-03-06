@@ -77,6 +77,8 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
 
   }
 
+
+
   def computeFunctionsCount = {
 
     val functionsCount = getElement("type",jsonObject)
@@ -145,11 +147,11 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
         }
       }
     }
+    if(mapFunctionStatements.size > 0) {
+      NoofStatementsInLargestFunction = mapFunctionStatements.valuesIterator.max
 
-    NoofStatementsInLargestFunction = mapFunctionStatements.valuesIterator.max
-    if(mapFunctionStatements.size > 0)
-      AvgNoOfStatementsInFunction = (mapFunctionStatements.valuesIterator.reduceLeft(_+_)) /  (mapFunctionStatements.size)
-
+      AvgNoOfStatementsInFunction = (mapFunctionStatements.valuesIterator.reduceLeft(_ + _)) / (mapFunctionStatements.size)
+    }
 
 
   }
@@ -202,10 +204,10 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
       noOfStatements = noOfStatements + 1
       mapFunctionsCC += (k -> noOfStatements)
     }
-
-    HighestCyclomaticComplexity = mapFunctionsCC.valuesIterator.max
-    if(mapFunctionsCC.size > 0) AvgCyclomaticComplexity = mapFunctionsCC.valuesIterator.reduceLeft(_+_) / mapFunctionsCC.size
-
+    if(mapFunctionsCC.size > 0) {
+      HighestCyclomaticComplexity = mapFunctionsCC.valuesIterator.max
+      AvgCyclomaticComplexity = mapFunctionsCC.valuesIterator.reduceLeft(_ + _) / mapFunctionsCC.size
+    }
 
   }
 
@@ -267,7 +269,11 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
 
     HalsteadProgramEffort =  BigDecimal( HalsteadDifficulty * HalsteadProgramVolume).setScale(2,BigDecimal.RoundingMode.HALF_UP).toDouble
 
+
+
   }
+
+
 
   def complexityMetric : Future[Map[String,Any]] = Future {
 
@@ -289,7 +295,6 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
       "HalsteadProgramLength" -> HalsteadProgramLength , "HalsteadProgramVolume" -> HalsteadProgramVolume , "HalsteadDifficulty" -> HalsteadDifficulty,
       "HalsteadProgramEffort" -> HalsteadProgramEffort)
   }
-
 
 
 

@@ -20,21 +20,23 @@ object HerseCore {
 
     val jsonObject = JsonMethods.parse(jsonAST)
     val analyzer = new HerseAnalyzer(jsonAST,sourceFile,jsonObject)
-   val ff = new FanInFanout(jsonAST)
+    val ff = new FanInFanout(jsonAST)
     val es= new ESCompliantFeatures(jsonObject)
+    val obj = new ObjectFeatures(jsonAST)
 
    val features = for {
     complexityFeatures <- analyzer.complexityMetric
     esFeatures <- es.checkESCompliant
     fanInfanOut <-  ff.computeFanInFanOut
-   } yield(complexityFeatures, esFeatures,fanInfanOut)
+    objectMetric <- obj.computeObjectMetrics
+   } yield(complexityFeatures, esFeatures,fanInfanOut,objectMetric)
 
 
-   val HerseFeatures = Await.result(features,40.seconds)
+   val HerseFeatures = Await.result(features,50.seconds)
 
-   println(HerseFeatures._1 ++ HerseFeatures._2 ++ HerseFeatures._3)
+   println(HerseFeatures._1 ++ HerseFeatures._2 ++ HerseFeatures._3 ++ HerseFeatures._4)
 
-   HerseFeatures._1 ++ HerseFeatures._2 ++ HerseFeatures._3
+   HerseFeatures._1 ++ HerseFeatures._2 ++ HerseFeatures._3 ++ HerseFeatures._4
 
 
 

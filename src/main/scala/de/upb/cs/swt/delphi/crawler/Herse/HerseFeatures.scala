@@ -8,6 +8,7 @@ trait HerseFeatures {
   var SingleLineComments = 0
   var MultiLineComments = 0
   var Ploc = 0
+  var Lloc = 0
   var NoOfFunctionsDeclarations = 0
   var LargestSignatureInFunction = 0
   var NoofStatementsInLargestFunction = 0
@@ -39,5 +40,14 @@ trait HerseFeatures {
   var HighestFanOut: Int = 0
   var AvgFanOut: Double = 0
   var AvgFanIn : Double = 0
+
+  var NoOfObjects: Int = 0
+  var  NoOfPropertiesInLargestObject : Int = 0
+  var AvgNoOfPropertiesPerObject: Int = 0
+
+  var LargestCognitiveComplexity : Double = 0
+  var AvgCognitiveComplexity : Double = 0
+  var LongestCallingChain: Double = 0
+  var AvgCallingChain : Double = 0
 
 }
