@@ -27,12 +27,12 @@ object HerseCore {
    val features = for {
     complexityFeatures <- analyzer.complexityMetric
     esFeatures <- es.checkESCompliant
-    fanInfanOut <-  ff.computeFanInFanOut
+    fanInfanOut <-  ff.computeFFMetrics
     objectMetric <- obj.computeObjectMetrics
    } yield(complexityFeatures, esFeatures,fanInfanOut,objectMetric)
 
 
-   val HerseFeatures = Await.result(features,50.seconds)
+   val HerseFeatures = Await.result(features,5.minutes)
 
    println(HerseFeatures._1 ++ HerseFeatures._2 ++ HerseFeatures._3 ++ HerseFeatures._4)
 

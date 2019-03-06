@@ -34,7 +34,7 @@ trait AstTraverse extends HerseFeatures {
   var mapFunctionStatements = scala.collection.mutable.Map[Int, Int]()
   var objectPropertiesMap = scala.collection.mutable.Map[Int, Int]()
   var callingChainMap =  scala.collection.mutable.Map[Int,Int]()
-  var mapFunctionCallees: Map[String,List[String]] = Map()
+  var mapFunctionCallees = scala.collection.mutable.Map[String,List[String]]()
   var typeStatementsMap = scala.collection.mutable.Map[Int,String]()
   var typeStatementsIndexMap =  scala.collection.mutable.Map[Int,Int]()
   var mapStatementsNesting = scala.collection.mutable.Map[Int, Int]()

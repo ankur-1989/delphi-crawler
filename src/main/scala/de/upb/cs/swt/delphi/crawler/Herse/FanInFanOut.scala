@@ -25,6 +25,10 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
   var secondOperator: String = ""
   def computeFanInFanOut = {
 
+    functionsMap.clear()
+    functionIndexMap.clear()
+    mapFunctionCallees.clear()
+
     getObjectIndexes(ast, "{\"type\":\"FunctionDeclaration\"")
     getObjectIndexes(ast, "{\"type\":\"AssignmentExpression\"")
     getObjectIndexes(ast, "{\"type\":\"VariableDeclarator\"")
@@ -104,7 +108,7 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
             }
           case None =>
         }
-        mapFunctionCallees = mapFunctionCallees ++ Map(functionName -> functionList.distinct)
+        mapFunctionCallees += (functionName -> functionList.distinct)
 
       }
       else if (closingIndex > 0 && v.contains("FunctionDeclaration")) {
@@ -162,7 +166,7 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
           case None =>
         }
 
-        mapFunctionCallees = mapFunctionCallees ++ Map(functionName -> functionList.distinct)
+        mapFunctionCallees += (functionName -> functionList.distinct)
 
       }
       else if (closingIndex > 0 && v.contains("VariableDeclarator")) {
@@ -226,7 +230,7 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
         }
 
 
-        mapFunctionCallees = mapFunctionCallees ++ Map(functionName -> functionList.distinct)
+        mapFunctionCallees += (functionName -> functionList.distinct)
 
       }
 
