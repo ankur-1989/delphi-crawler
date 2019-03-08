@@ -28,7 +28,7 @@ trait HerseFunctionality extends JSFilesHandler {
         if (!sourceFile.isEmpty) {
 
 
-          results = HerseCore.computeJSMetrics(getTargetFile(p.identifier.toString))
+          results = HerseCore.computeJSMetrics(sourceFile)
 
         }
       } catch {

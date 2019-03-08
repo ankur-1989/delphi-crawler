@@ -8,7 +8,7 @@ import org.json4s.jackson.JsonMethods
 import scala.collection.immutable.ListMap
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
+class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseFeatures with AstTraverse {
 
   implicit val format = DefaultFormats
 
@@ -21,29 +21,17 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
   var mapfunctionCC = scala.collection.mutable.Map[Int,Int]()
   var mapFunctionIsRecursion = scala.collection.mutable.Map[Int,Int]()
   var mapIfOperators = scala.collection.mutable.Map[Int,List[String]]()
+  var mapFunctionCallees: Map[String,List[String]] = Map()
   var firstOperator: String = ""
   var secondOperator: String = ""
   def computeFanInFanOut = {
 
-    functionsMap.clear()
-    functionIndexMap.clear()
-    mapFunctionCallees.clear()
-
-    getObjectIndexes(ast, "{\"type\":\"FunctionDeclaration\"")
-    getObjectIndexes(ast, "{\"type\":\"AssignmentExpression\"")
-    getObjectIndexes(ast, "{\"type\":\"VariableDeclarator\"")
-    getObjectIndexes(ast, "{\"type\":\"ArrowFunctionExpression\"")
-    getObjectIndexes(ast, "{\"type\":\"FunctionExpression\"")
-
-
-
-    for ((k, v) <- ListMap(functionsMap.toSeq.sortBy(_._1):_*)) {
+    for ((k, closingIndex) <- ListMap(createObjectMaps.functionIndexMap.toSeq.sortBy(_._1):_*)) {
 
 
       var functionList: List[String] = List()
-      val closingIndex = findClosingIndex(ast, k, "Function")
       val obj = parse(ast.substring(k, closingIndex + 1))
-      if (closingIndex > 0 && v.contains("AssignmentExpression")) {
+      if (closingIndex > 0 && createObjectMaps.functionsMap.get(k).get.contains("AssignmentExpression")) {
 
         (obj \ "right" \ "type").toOption match {
           case Some(value) =>
@@ -108,10 +96,10 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
             }
           case None =>
         }
-        mapFunctionCallees += (functionName -> functionList.distinct)
+        mapFunctionCallees = mapFunctionCallees ++ Map(functionName -> functionList.distinct)
 
       }
-      else if (closingIndex > 0 && v.contains("FunctionDeclaration")) {
+      else if (closingIndex > 0 && createObjectMaps.functionsMap.get(k).get.contains("FunctionDeclaration")) {
 
         functionName = obj.extract[FunctionDeclaration].id.name
 
@@ -166,10 +154,10 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
           case None =>
         }
 
-        mapFunctionCallees += (functionName -> functionList.distinct)
+        mapFunctionCallees = mapFunctionCallees ++ Map(functionName -> functionList.distinct)
 
       }
-      else if (closingIndex > 0 && v.contains("VariableDeclarator")) {
+      else if (closingIndex > 0 && createObjectMaps.functionsMap.get(k).get.contains("VariableDeclarator")) {
 
 
         (obj \ "init" \ "type").toOption match {
@@ -230,7 +218,7 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
         }
 
 
-        mapFunctionCallees += (functionName -> functionList.distinct)
+        mapFunctionCallees = mapFunctionCallees ++ Map(functionName -> functionList.distinct)
 
       }
 
@@ -238,14 +226,14 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
       if(functionList.distinct.contains(functionName)) {
 
 
-        if((v.contains("AssignmentExpression") || v.contains("VariableDeclarator"))) {
-          for( (key,value) <- ListMap(functionsMap.toSeq.sortBy(_._1):_*)) {
+        if((createObjectMaps.functionsMap.get(k).get.contains("AssignmentExpression") || createObjectMaps.functionsMap.get(k).get.contains("VariableDeclarator"))) {
+          for( (key,value) <- ListMap(createObjectMaps.functionsMap.toSeq.sortBy(_._1):_*)) {
             if(key > k && (value.contains("FunctionExpression") || value.contains("ArrowFunctionExpression")) &&
-              (v.contains("VariableDeclarator") || v.contains("AssignmentExpression"))){
+              (createObjectMaps.functionsMap.get(k).get.contains("VariableDeclarator") || createObjectMaps.functionsMap.get(k).get.contains("AssignmentExpression"))){
 
               mapFunctionIsRecursion += ( key -> 1)  }
           }
-        } else if(v.contains("FunctionDeclaration")) {
+        } else if(createObjectMaps.functionsMap.get(k).get.contains("FunctionDeclaration")) {
           mapFunctionIsRecursion += (k -> 1)
         }
       }
@@ -288,7 +276,7 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
   def computeCognitiveComplexity = {
 
 
-    for((k,v) <- functionIndexMap) {
+    for((k,v) <- createObjectMaps.functionIndexMap) {
       ccCount = 0
       typeStatementsMap.clear()
       typeStatementsIndexMap.clear()
@@ -297,7 +285,8 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
       var calleeList : List[String] = List()
 
 
-      if( functionsMap.get(k).get.equals("FunctionDeclaration") || functionsMap.get(k).get.equals("FunctionExpression") || functionsMap.get(k).get.equals("ArrowFunctionExpression")) {
+      if( createObjectMaps.functionsMap.get(k).get.equals("FunctionDeclaration") || createObjectMaps.functionsMap.get(k).get.equals("FunctionExpression")
+        || createObjectMaps.functionsMap.get(k).get.equals("ArrowFunctionExpression")) {
 
         val body = JsonMethods.parse(ast.substring(k, v + 1))
         val statements = getElement("type", body)
@@ -413,6 +402,7 @@ class FanInFanout(ast: String) extends HerseFeatures with AstTraverse {
     Map("HighestFanIn" -> HighestFanIn, "HighestFanOut" -> HighestFanOut, "AvgFanIn" -> AvgFanIn,
       "AvgFanOut" -> AvgFanOut , "LargestCognitiveComplexity" -> LargestCognitiveComplexity, "AvgCognitiveComplexity" -> AvgCognitiveComplexity )
   }
+
 
 }
 

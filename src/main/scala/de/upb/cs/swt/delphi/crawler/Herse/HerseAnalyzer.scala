@@ -22,9 +22,10 @@ import scala.math.{BigDecimal, log10}
 
 
 
-class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) extends HerseFeatures with Dynamic with AstTraverse {
+class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue,createObjectMaps: CreateObjectMaps) extends HerseFeatures with Dynamic with AstTraverse {
 
   implicit val formats = DefaultFormats
+  var mapFunctionStatements = scala.collection.mutable.Map[Int, Int]()
 
   def computeCountComments = {
 
@@ -53,10 +54,9 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
     val loc: Boolean = true
     var countBlockC = 0
     val ast = (s"node src/main/resources/parser.js ${sourceFile} ${loc}".!!).toString
-    getObjectIndexes(ast,"{\"type\":\"Block\"")
-    for ( (k,v) <- commentsMap) {
-      if(v.contains("Block")) {
-        val closingIndex = findClosingIndex(ast, k,"Block")
+
+    for ( (k,closingIndex) <- createObjectMaps.commentsIndexMap) {
+      if(createObjectMaps.commentsMap.get(k).get.contains("Block")) {
         val end = JsonMethods.parse(ast.substring(k, closingIndex + 1)).extract[BlockComment].loc.end.line
         val start  = JsonMethods.parse(ast.substring(k, closingIndex + 1)).extract[BlockComment].loc.start.line
         if (end > start) countBlockC += (end-start)+1 else 1
@@ -115,15 +115,7 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
   def computeFunctionStatements = {
 
 
-    getObjectIndexes(jsonAst,"{\"type\":\"FunctionDeclaration\"")
-    getObjectIndexes(jsonAst,"{\"type\":\"FunctionExpression\"")
-    getObjectIndexes(jsonAst,"{\"type\":\"ArrowFunctionExpression\"")
-
-    for((k,v) <- functionsMap) {
-      findClosingIndex(jsonAst,k,"Function")
-    }
-
-    for((k,v) <- functionIndexMap) {
+    for((k,v) <- createObjectMaps.functionIndexMap) {
       getStatements(k,v,jsonAst.substring(k,v))
     }
 
@@ -140,9 +132,9 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
     for ((s, c) <- mapFunctionStatements) {
 
 
-      for ((k, v) <- functionIndexMap) {
+      for ((k, v) <- createObjectMaps.functionIndexMap) {
 
-        if (s > k && functionIndexMap.get(s).get < v) {
+        if (s > k && createObjectMaps.functionIndexMap.get(s).get < v) {
           mapFunctionStatements(k) = mapFunctionStatements.get(k).get - mapFunctionStatements.get(s).get
         }
       }
@@ -161,18 +153,12 @@ class HerseAnalyzer(jsonAst: String, sourceFile: String, jsonObject: JValue) ext
   def computeCC() {
 
     var mapFunctionsCC = scala.collection.mutable.Map[Int,Int]()
-    getObjectIndexes(jsonAst,"{\"type\":\"FunctionDeclaration\"")
-    getObjectIndexes(jsonAst,"{\"type\":\"FunctionExpression\"")
-    getObjectIndexes(jsonAst,"{\"type\":\"ArrowFunctionExpression\"")
 
-    for((k,v) <- functionsMap) {
-      findClosingIndex(jsonAst,k,"Function")
-    }
 
     val pattern = """"type":(.*?),""".r
 
 
-    for((k,v) <- functionIndexMap) {
+    for((k,v) <- createObjectMaps.functionIndexMap) {
 
       var noOfStatements = 0
 

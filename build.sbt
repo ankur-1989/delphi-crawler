@@ -111,3 +111,5 @@ libraryDependencies ++= Seq(
 libraryDependencies += "org.apache.commons" % "commons-compress" % "1.18"
 
 libraryDependencies += "com.lihaoyi" %% "upickle" % "0.7.1"
+
+libraryDependencies += "au.com.bytecode" % "opencsv" % "2.4"
