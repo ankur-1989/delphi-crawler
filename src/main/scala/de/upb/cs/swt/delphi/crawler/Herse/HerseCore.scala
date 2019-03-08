@@ -46,10 +46,7 @@ object HerseCore {
 
    HerseFeatures._1 ++ HerseFeatures._2 ++ HerseFeatures._3 ++ HerseFeatures._4
 
-
-
-
-  }
+ }
 
 
 }
