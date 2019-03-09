@@ -20,7 +20,7 @@ package object Herse {
   case class AssignmentMemberExpression(
                                          `type`: String,
                                          operator : String,
-                                         left: MemberExpression,
+                                         left: MemberExpressionNew,
                                          right: FunctionExpression
                                        )
   case class AssignmentIdentifierExpression(
@@ -37,6 +37,12 @@ package object Herse {
                                property : Id
                              )
 
+  case class MemberExpressionNew(
+                                  `type`: String,
+                                  computed: Boolean,
+                                  `object` : Map[String,Any],
+                                  property : Map[String,Any]
+                                )
 
   case class VariableDeclarator (
                                   `type`: String,
@@ -62,6 +68,20 @@ package object Herse {
                                      `object`: Option[Id],
                                      property: Id
                                    )
+
+  case class CalleeME(
+                       `type`: String,
+                       computed: Boolean,
+                       `object`: Option[Id],
+                       property: MemberExpression
+                     )
+
+  case class CalleeMEPropertyLiteral(
+                                      `type`: String,
+                                      computed: Boolean,
+                                      `object`: Option[Map[String,Any]],
+                                      property: Map[String,Any]
+                                    )
 
   case class CalleeIdentifierExpression(
                                          `type`: String,

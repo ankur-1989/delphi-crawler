@@ -24,10 +24,10 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
   var mapFunctionCallees: Map[String,List[String]] = Map()
   var firstOperator: String = ""
   var secondOperator: String = ""
+
   def computeFanInFanOut = {
 
-    for ((k, closingIndex) <- ListMap(createObjectMaps.functionIndexMap.toSeq.sortBy(_._1):_*)) {
-
+    for ((k, closingIndex) <- ListMap(createObjectMaps.functionIndexMap.toSeq.sortBy(_._1): _*)) {
 
       var functionList: List[String] = List()
       val obj = parse(ast.substring(k, closingIndex + 1))
@@ -42,11 +42,29 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
 
                   obj.extract[AssignmentMemberExpression].left.`object`.keySet.foreach(f =>
                     if (f.equals("name")) {
-                      functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("name").get.toString.concat(".").concat(obj.extract[AssignmentMemberExpression].left.property.name)
+                      obj.extract[AssignmentMemberExpression].left.property.get("name") match {
+                        case Some(name) => functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("name").get.toString.concat(".").concat(obj.extract[AssignmentMemberExpression].left.property.get("name").get.toString)
+                        case None => obj.extract[AssignmentMemberExpression].left.property.get("value") match {
+                          case Some(value) => functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("name").get.toString.concat(".").concat(obj.extract[AssignmentMemberExpression].left.property.get("value").get.toString)
+                          case None => functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("name").get.toString
+                        }
+                      }
+
                     } else if (f.equals("object")) {
-                      functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("object").get.asInstanceOf[Map[String, Any]].get("name").get.toString.concat(".")
-                        .concat(obj.extract[AssignmentMemberExpression].left.`object`.get("property").get.asInstanceOf[Map[String, Any]].get("name").get.toString).concat(".")
-                        .concat(obj.extract[AssignmentMemberExpression].left.property.name)
+
+                      obj.extract[AssignmentMemberExpression].left.property.get("name") match {
+                        case Some(name) => functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("object").get.asInstanceOf[Map[String, Any]].get("name").get.toString.concat(".")
+                          .concat(obj.extract[AssignmentMemberExpression].left.`object`.get("property").get.asInstanceOf[Map[String, Any]].get("name").get.toString).concat(".")
+                          .concat(obj.extract[AssignmentMemberExpression].left.property.get("name").get.toString)
+                        case None => obj.extract[AssignmentMemberExpression].left.property.get("value") match {
+                          case Some(value) => functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("object").get.asInstanceOf[Map[String, Any]].get("name").get.toString.concat(".")
+                            .concat(obj.extract[AssignmentMemberExpression].left.`object`.get("property").get.asInstanceOf[Map[String, Any]].get("name").get.toString).concat(".")
+                            .concat(obj.extract[AssignmentMemberExpression].left.property.get("value").get.toString)
+                          case None =>
+                        }
+                      }
+
+
                     }
 
                   )
@@ -63,17 +81,20 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
                 case Some(callee) => if ("callee".r.findAllIn(compact(render(obj))).matchData.toList.size > 1) {
                   callee.children.foreach(f =>
                     (f \ "type").toOption match {
-                      case Some(t) => if (t.values.toString.contains("MemberExpression"))
+                      case Some(t) => if (t.values.toString.contains("MemberExpression")) {
+
                         functionList = f.extract[CalleeMemberExpression].`object` match {
                           case Some(n) => n.name + "." + f.extract[CalleeMemberExpression].property.name :: functionList
                           case None => f.extract[CalleeMemberExpression].property.name :: functionList
                         }
+                      }
                       else if (t.values.toString.contains("Identifier"))
                         functionList = f.extract[CalleeIdentifierExpression].name :: functionList
                       case None =>
                     }
 
-                  ) }
+                  )
+                }
                 else {
                   callee.children.foreach(f =>
                     (f \ "type").toOption match {
@@ -104,8 +125,6 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
         functionName = obj.extract[FunctionDeclaration].id.name
 
 
-
-
         (obj \\ "callee").toOption match {
           case Some(callee) =>
             if ("callee".r.findAllIn(compact(render(obj))).matchData.toList.size > 1) {
@@ -115,10 +134,38 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
                 (f \ "type").toOption match {
                   case Some(t) =>
                     if (t.values.toString.contains("MemberExpression")) {
-                      functionList = f.extract[CalleeMemberExpression].`object` match {
-                        case Some(n) => n.name + "." + f.extract[CalleeMemberExpression].property.name :: functionList
-                        case None => f.extract[CalleeMemberExpression].property.name :: functionList
+                      if((f \ "property" \ "type").values.toString.equals("MemberExpression"))  {
+
+
+                        functionList = f.extract[CalleeME].`object` match {
+                          case Some(n) => n.name + "." + f.extract[CalleeME].property.`object`.get("name") + "." + f.extract[CalleeME].property.property.name :: functionList
+                          case None => f.extract[CalleeME].property.`object`.get("name") + "." + f.extract[CalleeME].property.property.name :: functionList
+                        }
+
+                      } else if((f \ "property" \"type").values.toString.equals("Literal")) {
+
+                        f.extract[CalleeMEPropertyLiteral].`object` match {
+                          case Some(o) => o.keys.foreach( k =>  { if(k.contains("name")) {
+
+                            functionList = o.get("name").get.toString + "." + f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
+
+                          } else if(k.contains("callee")) {
+                            functionList = o.get("callee").get.asInstanceOf[Map[String,Any]].get("name").get.toString + "." +
+                              f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
+                          }
+
+                          })
+                          case None => functionList = f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
+
+                        }}
+                      else {
+
+                        functionList = f.extract[CalleeMemberExpression].`object` match {
+                          case Some(n) => n.name + "." + f.extract[CalleeMemberExpression].property.name :: functionList
+                          case None => f.extract[CalleeMemberExpression].property.name :: functionList
+                        }
                       }
+
                     }
                     else if (t.values.toString.contains("Identifier")) {
 
@@ -135,9 +182,36 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
               (callee \ "type").toOption match {
                 case Some(t) =>
                   if (t.values.toString.contains("MemberExpression")) {
-                    functionList = callee.extract[CalleeMemberExpression].`object` match {
-                      case Some(n) => n.name + "." + callee.extract[CalleeMemberExpression].property.name :: functionList
-                      case None => callee.extract[CalleeMemberExpression].property.name :: functionList
+                    if((callee \ "property" \ "type").values.toString.equals("MemberExpression"))  {
+
+
+                      functionList = callee.extract[CalleeME].`object` match {
+                        case Some(n) => n.name + "." + callee.extract[CalleeME].property.`object`.get("name") + "." + callee.extract[CalleeME].property.property.name :: functionList
+                        case None => callee.extract[CalleeME].property.`object`.get("name") + "." + callee.extract[CalleeME].property.property.name :: functionList
+                      }
+
+                    } else if((callee \ "property" \"type").values.toString.equals("Literal")) {
+
+                      callee.extract[CalleeMEPropertyLiteral].`object` match {
+                        case Some(o) => o.keys.foreach( k =>  { if(k.contains("name")) {
+
+                          functionList = o.get("name").get.toString + "." + callee.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
+
+                        } else if(k.contains("callee")) {
+                          functionList = o.get("callee").get.asInstanceOf[Map[String,Any]].get("name").get.toString + "." +
+                            callee.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
+                        }
+
+                        })
+                        case None => functionList = callee.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
+
+                      }}
+                    else {
+
+                      functionList = callee.extract[CalleeMemberExpression].`object` match {
+                        case Some(n) => n.name + "." + callee.extract[CalleeMemberExpression].property.name :: functionList
+                        case None => callee.extract[CalleeMemberExpression].property.name :: functionList
+                      }
                     }
                   }
                   else if (t.values.toString.contains("Identifier")) {
@@ -166,16 +240,43 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
 
             (obj \\ "callee").toOption match {
 
-              case Some(callee) =>  if ("callee".r.findAllIn(compact(render(obj))).matchData.toList.size > 1) {
+              case Some(callee) => if ("callee".r.findAllIn(compact(render(obj))).matchData.toList.size > 1) {
 
                 callee.children.foreach(f => {
 
                   (f \ "type").toOption match {
                     case Some(t) =>
                       if (t.values.toString.contains("MemberExpression")) {
-                        functionList = f.extract[CalleeMemberExpression].`object` match {
-                          case Some(n) => n.name + "." + f.extract[CalleeMemberExpression].property.name :: functionList
-                          case None => f.extract[CalleeMemberExpression].property.name :: functionList
+
+                        if((f \ "property" \ "type").values.toString.equals("MemberExpression"))  {
+
+
+                          functionList = f.extract[CalleeME].`object` match {
+                            case Some(n) => n.name + "." + f.extract[CalleeME].property.`object`.get("name") + "." + f.extract[CalleeME].property.property.name :: functionList
+                            case None => f.extract[CalleeME].property.`object`.get("name") + "." + f.extract[CalleeME].property.property.name :: functionList
+                          }
+
+                        } else if((f \ "property" \"type").values.toString.equals("Literal")) {
+
+                          f.extract[CalleeMEPropertyLiteral].`object` match {
+                            case Some(o) => o.keys.foreach( k =>  { if(k.contains("name")) {
+
+                              functionList = o.get("name").get.toString + "." + f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
+
+                            } else if(k.contains("callee")) {
+                              functionList = o.get("callee").get.asInstanceOf[Map[String,Any]].get("name").get.toString + "." +
+                                f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
+                            }
+
+                            })
+                            case None => functionList = f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
+
+                          }}
+                        else {
+                          functionList = f.extract[CalleeMemberExpression].`object` match {
+                            case Some(n) => n.name + "." + f.extract[CalleeMemberExpression].property.name :: functionList
+                            case None => f.extract[CalleeMemberExpression].property.name :: functionList
+                          }
                         }
                       }
                       else if (t.values.toString.contains("Identifier")) {
@@ -193,9 +294,19 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
                 (callee \ "type").toOption match {
                   case Some(t) =>
                     if (t.values.toString.contains("MemberExpression")) {
-                      functionList = callee.extract[CalleeMemberExpression].`object` match {
-                        case Some(n) => n.name + "." + callee.extract[CalleeMemberExpression].property.name :: functionList
-                        case None => callee.extract[CalleeMemberExpression].property.name :: functionList
+                      if((callee \ "property" \ "type").values.toString.equals("MemberExpression"))  {
+
+
+                        functionList = callee.extract[CalleeME].`object` match {
+                          case Some(n) => n.name + "." + callee.extract[CalleeME].property.`object`.get("name") + "." + callee.extract[CalleeME].property.property.name :: functionList
+                          case None => callee.extract[CalleeME].property.`object`.get("name") + "." + callee.extract[CalleeME].property.property.name :: functionList
+                        }
+
+                      } else {
+                        functionList = callee.extract[CalleeMemberExpression].`object` match {
+                          case Some(n) => n.name + "." + callee.extract[CalleeMemberExpression].property.name :: functionList
+                          case None => callee.extract[CalleeMemberExpression].property.name :: functionList
+                        }
                       }
                     }
                     else if (t.values.toString.contains("Identifier")) {
@@ -223,17 +334,18 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
       }
 
 
-      if(functionList.distinct.contains(functionName)) {
+      if (functionList.distinct.contains(functionName)) {
 
 
-        if((createObjectMaps.functionsMap.get(k).get.contains("AssignmentExpression") || createObjectMaps.functionsMap.get(k).get.contains("VariableDeclarator"))) {
-          for( (key,value) <- ListMap(createObjectMaps.functionsMap.toSeq.sortBy(_._1):_*)) {
-            if(key > k && (value.contains("FunctionExpression") || value.contains("ArrowFunctionExpression")) &&
-              (createObjectMaps.functionsMap.get(k).get.contains("VariableDeclarator") || createObjectMaps.functionsMap.get(k).get.contains("AssignmentExpression"))){
+        if ((createObjectMaps.functionsMap.get(k).get.contains("AssignmentExpression") || createObjectMaps.functionsMap.get(k).get.contains("VariableDeclarator"))) {
+          for ((key, value) <- ListMap(createObjectMaps.functionsMap.toSeq.sortBy(_._1): _*)) {
+            if (key > k && (value.contains("FunctionExpression") || value.contains("ArrowFunctionExpression")) &&
+              (createObjectMaps.functionsMap.get(k).get.contains("VariableDeclarator") || createObjectMaps.functionsMap.get(k).get.contains("AssignmentExpression"))) {
 
-              mapFunctionIsRecursion += ( key -> 1)  }
+              mapFunctionIsRecursion += (key -> 1)
+            }
           }
-        } else if(createObjectMaps.functionsMap.get(k).get.contains("FunctionDeclaration")) {
+        } else if (createObjectMaps.functionsMap.get(k).get.contains("FunctionDeclaration")) {
           mapFunctionIsRecursion += (k -> 1)
         }
       }
@@ -276,16 +388,16 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
   def computeCognitiveComplexity = {
 
 
-    for((k,v) <- createObjectMaps.functionIndexMap) {
+    for ((k, v) <- createObjectMaps.functionIndexMap) {
       ccCount = 0
       typeStatementsMap.clear()
       typeStatementsIndexMap.clear()
       mapStatementsNesting.clear()
       mapIfOperators.clear()
-      var calleeList : List[String] = List()
+      var calleeList: List[String] = List()
 
 
-      if( createObjectMaps.functionsMap.get(k).get.equals("FunctionDeclaration") || createObjectMaps.functionsMap.get(k).get.equals("FunctionExpression")
+      if (createObjectMaps.functionsMap.get(k).get.equals("FunctionDeclaration") || createObjectMaps.functionsMap.get(k).get.equals("FunctionExpression")
         || createObjectMaps.functionsMap.get(k).get.equals("ArrowFunctionExpression")) {
 
         val body = JsonMethods.parse(ast.substring(k, v + 1))
@@ -314,31 +426,31 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
           mapStatementsNesting += (tk -> nesting)
         }
 
-        statements.asInstanceOf[List[String]].filter( f => f.equals("BreakStatement") || f.equals("ContinueStatement")).foreach( m =>
+        statements.asInstanceOf[List[String]].filter(f => f.equals("BreakStatement") || f.equals("ContinueStatement")).foreach(m =>
           ccCount += 1
         )
 
-        for((key,value) <- mapStatementsNesting) {
+        for ((key, value) <- mapStatementsNesting) {
 
           typeStatementsMap.get(key).get match {
-            case "IfStatement" =>     var operatorList : List[String] = List()
-              """"operator":(.*?),""".r.findAllIn(ast.substring(key,typeStatementsIndexMap.get(key).get)).matchData foreach (f => {
-                val operator = f.group(1).replace("\"","")
-                if(operator.equals("||") || operator.equals("&&") || operator.equals("!")) {
+            case "IfStatement" => var operatorList: List[String] = List()
+              """"operator":(.*?),""".r.findAllIn(ast.substring(key, typeStatementsIndexMap.get(key).get)).matchData foreach (f => {
+                val operator = f.group(1).replace("\"", "")
+                if (operator.equals("||") || operator.equals("&&") || operator.equals("!")) {
                   operatorList = operator :: operatorList
                 }
 
               })
               mapIfOperators += (key -> operatorList)
-              ccCount += value+1
-            case "ForStatement" => ccCount += value+1
-            case "ForInStatement" => ccCount += value+1
-            case "ForOfStatement" =>  ccCount += value+1
-            case "ConditionalExpression" => ccCount += value+1
-            case "SwitchStatement" => ccCount += value+1
-            case "WhileStatement" => ccCount += value+1
-            case "DoWhileStatement" => ccCount += value+1
-            case "CatchClause" => ccCount += value+1
+              ccCount += value + 1
+            case "ForStatement" => ccCount += value + 1
+            case "ForInStatement" => ccCount += value + 1
+            case "ForOfStatement" => ccCount += value + 1
+            case "ConditionalExpression" => ccCount += value + 1
+            case "SwitchStatement" => ccCount += value + 1
+            case "WhileStatement" => ccCount += value + 1
+            case "DoWhileStatement" => ccCount += value + 1
+            case "CatchClause" => ccCount += value + 1
             case "FunctionExpression" =>
             case "ArrowFunctionExpression" =>
             case "FunctionDeclaration" =>
@@ -347,16 +459,18 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
 
         }
 
-        for((ok,ov) <- mapIfOperators) {
+        for ((ok, ov) <- mapIfOperators) {
           firstOperator = ""
           secondOperator = ""
-          if(ov.size == 1) {ccCount += 1}
-          else if(ov.size > 1) {
+          if (ov.size == 1) {
+            ccCount += 1
+          }
+          else if (ov.size > 1) {
             firstOperator = ov(0)
             ccCount += 1
-            for ( i <- 1 to ov.size-1) {
+            for (i <- 1 to ov.size - 1) {
               secondOperator = ov(i)
-              if(!secondOperator.equals(firstOperator)) {
+              if (!secondOperator.equals(firstOperator)) {
                 ccCount += 1
               }
               firstOperator = secondOperator
@@ -370,24 +484,19 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
       }
 
 
-
       mapFunctionIsRecursion.get(k) match {
-        case Some(value) => if(value == 1) ccCount += 1
+        case Some(value) => if (value == 1) ccCount += 1
         case None =>
       }
 
 
-
-
-
     }
 
 
-    if(mapfunctionCC.size > 0) {
-      AvgCognitiveComplexity = mapfunctionCC.valuesIterator.reduceLeft(_+_) / mapfunctionCC.size
+    if (mapfunctionCC.size > 0) {
+      AvgCognitiveComplexity = mapfunctionCC.valuesIterator.reduceLeft(_ + _) / mapfunctionCC.size
       LargestCognitiveComplexity = mapfunctionCC.valuesIterator.max
     }
-
 
 
   }
@@ -400,8 +509,9 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
     computeCognitiveComplexity
 
     Map("HighestFanIn" -> HighestFanIn, "HighestFanOut" -> HighestFanOut, "AvgFanIn" -> AvgFanIn,
-      "AvgFanOut" -> AvgFanOut , "LargestCognitiveComplexity" -> LargestCognitiveComplexity, "AvgCognitiveComplexity" -> AvgCognitiveComplexity )
+      "AvgFanOut" -> AvgFanOut, "LargestCognitiveComplexity" -> LargestCognitiveComplexity, "AvgCognitiveComplexity" -> AvgCognitiveComplexity)
   }
+
 
 
 }

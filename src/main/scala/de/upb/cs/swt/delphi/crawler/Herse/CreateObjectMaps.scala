@@ -2,8 +2,9 @@ package de.upb.cs.swt.delphi.crawler.Herse
 
 import scala.annotation.tailrec
 import scala.collection.mutable
+import sys.process._
 
-class CreateObjectMaps(ast: String) {
+class CreateObjectMaps(ast: String,sourceFile : String) {
 
   var functionsMap : Map[Int, String] = Map()
   var commentsMap = scala.collection.mutable.Map[Int, String]()
@@ -16,7 +17,8 @@ class CreateObjectMaps(ast: String) {
   var objectIndexMap = scala.collection.mutable.Map[Int,Int]()
   var commentsIndexMap = scala.collection.mutable.Map[Int,Int]()
   var callExpressionIndexMap = scala.collection.mutable.Map[Int,Int]()
-
+  val loc = true
+  val astComments = (s"node src/main/resources/parser.js ${sourceFile} ${loc}".!!).toString
   var index = -1
   var pattern: String = ""
 
@@ -114,8 +116,16 @@ class CreateObjectMaps(ast: String) {
 
       if(ast.charAt(i).equals('{')) {
 
-        closingIndex.push(ast.charAt(i).asInstanceOf[Int])
+        if((ast.charAt(i+1).equals(''') && ast.charAt(i-1).equals(''')) || (ast.charAt(i+1).equals('"') && ast.charAt(i-1).equals('"'))) {
+        }
+        else {
+          closingIndex.push(ast.charAt(i).asInstanceOf[Int]) }
       } else if (ast.charAt(i).equals('}')) {
+        if((ast.charAt(i+1).equals(''') && ast.charAt(i-1).equals(''')) || (ast.charAt(i+1).equals('"') && ast.charAt(i-1).equals('"'))) {
+
+        } else if(ast.charAt(i-1).equals('\\')) {
+
+        } else {
         closingIndex.pop()
         if(closingIndex.isEmpty) {
 
@@ -135,7 +145,7 @@ class CreateObjectMaps(ast: String) {
 
 
           return i
-        }
+        }}
       }
       i= i+1
     }
@@ -167,6 +177,10 @@ class CreateObjectMaps(ast: String) {
       } else if(f.equals("expression")) {
         index = -1
         getExpressionIndexes(ast,pattern)
+      } else if (f.equals("Block")) {
+
+        index  = -1
+        getObjectIndexes(astComments,pattern)
       }
       else {
         index = -1
@@ -189,7 +203,7 @@ class CreateObjectMaps(ast: String) {
     }
 
     for((key,value) <- commentsMap) {
-      findClosingIndex(ast,key,"Block")
+      findClosingIndex(astComments,key,"Block")
     }
 
     for((key,value) <- objectsMap) {

@@ -18,7 +18,7 @@ object HerseCore {
 
    val jsonAST = s"node ${processing.parserScript} ${sourceFile}".!!
 
-   val createObject = new CreateObjectMaps(jsonAST)
+   val createObject = new CreateObjectMaps(jsonAST,sourceFile)
    createObject.createOpeningIndexesMap
    createObject.createClosingIndexMap
 
