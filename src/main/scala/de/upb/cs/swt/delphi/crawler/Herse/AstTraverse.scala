@@ -27,30 +27,13 @@ trait AstTraverse extends HerseFeatures {
   var lines : Array[String] = Array()
 
 
-  def checkParams(node: JValue): Any = {
-
-    node match {
-      case JString(s) => s
-      case JNull =>
-      case JNothing =>
-      case JObject(obj) => if (obj.nonEmpty) obj.foreach(f => if (f._1.contains("params")) LargestSignatureInFunction = if (f._2.children.size > LargestSignatureInFunction) f._2.children.size else LargestSignatureInFunction
-      else checkParams(f._2))
-      case JsonAST.JArray(arr) => if (arr.nonEmpty) arr.foreach(f => checkParams(f))
-      case JsonAST.JBool(value) =>
-      case JsonAST.JDecimal(num) =>
-      case JsonAST.JInt(num) =>
-      case JDouble(num) =>
-      case JsonAST.JLong(num) =>
-      case JsonAST.JSet(set) =>
-    }
-
-  }
 
 
   def getElement(elem: String, json: JValue) = for {
     JObject(child) <- json
     JField(`elem`, JString(value)) <- child
   } yield value
+
 
 
   def getVariables(elem: String, json: JValue) = for {
@@ -114,6 +97,7 @@ trait AstTraverse extends HerseFeatures {
     functionStatementsMap = functionStatementsMap ++ Map( startIndex -> statementList.toList)
 
   }
+
 
 
 

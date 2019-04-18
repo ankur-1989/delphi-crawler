@@ -4,26 +4,26 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 import sys.process._
 
-class CreateObjectMaps(ast: String,sourceFile : String) {
+class CreateObjectMaps(ast: String, sourceFile : String, astComments: String) {
 
   var functionsMap : Map[Int, String] = Map()
   var commentsMap = scala.collection.mutable.Map[Int, String]()
   var objectsMap = scala.collection.mutable.Map[Int, String]()
   var expressionMap : Map[Int, String] = Map()
   var callExpressionMap = scala.collection.mutable.Map[Int, String]()
-
+  var classDeclarationMap = scala.collection.mutable.Map[Int, String]()
+  var classDeclarationIndexMap = scala.collection.mutable.Map[Int,Int]()
   var expressionIndexMap : Map[Int,Int] = Map()
   var functionIndexMap : Map[Int,Int] = Map()
   var objectIndexMap = scala.collection.mutable.Map[Int,Int]()
   var commentsIndexMap = scala.collection.mutable.Map[Int,Int]()
   var callExpressionIndexMap = scala.collection.mutable.Map[Int,Int]()
   val loc = true
-  val astComments = (s"node src/main/resources/parser.js ${sourceFile} ${loc}".!!).toString
   var index = -1
   var pattern: String = ""
 
   val objectsList = List("ObjectExpression", "FunctionExpression", "AssignmentExpression", "FunctionDeclaration", "VariableDeclarator", "ObjectPattern",
-    "ArrowFunctionExpression", "CallExpression", "Block", "expression")
+    "ArrowFunctionExpression", "CallExpression", "Block", "expression" , "ClassDeclaration")
 
   def getObjectIndexes(code: String, pattern: String): Unit = {
 
@@ -60,6 +60,9 @@ class CreateObjectMaps(ast: String,sourceFile : String) {
         else if (index > 0 && pattern.contains("CallExpression")) {
           callExpressionMap += (index -> "expression")
           getObjectIndexesInside(code, pattern)
+        } else if (index > 0 && pattern.contains("ClassDeclaration")) {
+          classDeclarationMap += (index -> "ClassDeclaration")
+          getObjectIndexesInside(code, pattern)
         }
 
 
@@ -70,6 +73,7 @@ class CreateObjectMaps(ast: String,sourceFile : String) {
     getObjectIndexesInside(code,pattern)
 
   }
+
 
   def getExpressionIndexes (code : String, pattern: String) = {
 
@@ -116,16 +120,8 @@ class CreateObjectMaps(ast: String,sourceFile : String) {
 
       if(ast.charAt(i).equals('{')) {
 
-        if((ast.charAt(i+1).equals(''') && ast.charAt(i-1).equals(''')) || (ast.charAt(i+1).equals('"') && ast.charAt(i-1).equals('"'))) {
-        }
-        else {
-          closingIndex.push(ast.charAt(i).asInstanceOf[Int]) }
+        closingIndex.push(ast.charAt(i).asInstanceOf[Int])
       } else if (ast.charAt(i).equals('}')) {
-        if((ast.charAt(i+1).equals(''') && ast.charAt(i-1).equals(''')) || (ast.charAt(i+1).equals('"') && ast.charAt(i-1).equals('"'))) {
-
-        } else if(ast.charAt(i-1).equals('\\')) {
-
-        } else {
         closingIndex.pop()
         if(closingIndex.isEmpty) {
 
@@ -141,11 +137,15 @@ class CreateObjectMaps(ast: String,sourceFile : String) {
 
           } else if (obj.equals("Block")) {
             commentsIndexMap += (startingIndex -> i)
+          } else if (obj.equals("Line")) {
+            commentsIndexMap += (startingIndex -> i)
+          } else if (obj.equals("ClassDeclaration")) {
+            classDeclarationIndexMap += (startingIndex -> i)
           }
 
 
           return i
-        }}
+        }
       }
       i= i+1
     }
@@ -177,7 +177,7 @@ class CreateObjectMaps(ast: String,sourceFile : String) {
       } else if(f.equals("expression")) {
         index = -1
         getExpressionIndexes(ast,pattern)
-      } else if (f.equals("Block")) {
+      } else if (f.equals("Block") || f.equals("Line")) {
 
         index  = -1
         getObjectIndexes(astComments,pattern)
@@ -198,16 +198,22 @@ class CreateObjectMaps(ast: String,sourceFile : String) {
 
   def createClosingIndexMap = {
 
+
     for((key,value) <- functionsMap) {
       findClosingIndex(ast,key,"Function")
     }
 
     for((key,value) <- commentsMap) {
-      findClosingIndex(astComments,key,"Block")
+      if(value.contains("Block"))
+        findClosingIndex(astComments,key,"Block")
     }
 
     for((key,value) <- objectsMap) {
       findClosingIndex(ast,key,"ObjectExpression")
+    }
+
+    for((key,value) <- classDeclarationMap) {
+      findClosingIndex(ast,key,"ClassDeclaration")
     }
 
     for((key,value) <- expressionMap) {
@@ -221,5 +227,6 @@ class CreateObjectMaps(ast: String,sourceFile : String) {
 
 
   }
+
 
 }

@@ -1,14 +1,15 @@
 package de.upb.cs.swt.delphi.crawler.Herse
 
-
 import org.json4s.DefaultFormats
-import org.json4s.jackson.JsonMethods._
-import scala.concurrent.Future
+import org.json4s.native.Serialization._
 import org.json4s.jackson.JsonMethods
+import org.json4s.jackson.JsonMethods._
+
 import scala.collection.immutable.ListMap
+import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseFeatures with AstTraverse {
+class FanInFanout(ast: String, createObjectMaps: CreateObjectMaps) extends HerseFeatures with AstTraverse {
 
   implicit val format = DefaultFormats
 
@@ -18,10 +19,10 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
   var fanIn = 0
   var totalFanIn = 0
   var ccCount = 0
-  var mapfunctionCC = scala.collection.mutable.Map[Int,Int]()
-  var mapFunctionIsRecursion = scala.collection.mutable.Map[Int,Int]()
-  var mapIfOperators = scala.collection.mutable.Map[Int,List[String]]()
-  var mapFunctionCallees: Map[String,List[String]] = Map()
+  var mapfunctionCC = scala.collection.mutable.Map[Int, Int]()
+  var mapFunctionIsRecursion = scala.collection.mutable.Map[Int, Int]()
+  var mapIfOperators = scala.collection.mutable.Map[Int, List[String]]()
+  var mapFunctionCallees = scala.collection.mutable.Map[String, List[String]]()
   var firstOperator: String = ""
   var secondOperator: String = ""
 
@@ -29,64 +30,55 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
 
     for ((k, closingIndex) <- ListMap(createObjectMaps.functionIndexMap.toSeq.sortBy(_._1): _*)) {
 
+
       var functionList: List[String] = List()
-      val obj = parse(ast.substring(k, closingIndex + 1))
+      functionName = ""
+
+      val functionobj = parse(ast.substring(k, closingIndex + 1))
       if (closingIndex > 0 && createObjectMaps.functionsMap.get(k).get.contains("AssignmentExpression")) {
 
-        (obj \ "right" \ "type").toOption match {
+        (functionobj \ "right" \ "type").toOption match {
           case Some(value) =>
 
             if (value.values.toString.contains("FunctionExpression") || value.values.toString.contains("ArrowFunctionExpression")) {
-              (obj \ "left" \ "type").toOption match {
+
+              (functionobj \ "left" \ "type").toOption match {
                 case Some(v) => if (v.values.toString.equals("MemberExpression")) {
 
-                  obj.extract[AssignmentMemberExpression].left.`object`.keySet.foreach(f =>
-                    if (f.equals("name")) {
-                      obj.extract[AssignmentMemberExpression].left.property.get("name") match {
-                        case Some(name) => functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("name").get.toString.concat(".").concat(obj.extract[AssignmentMemberExpression].left.property.get("name").get.toString)
-                        case None => obj.extract[AssignmentMemberExpression].left.property.get("value") match {
-                          case Some(value) => functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("name").get.toString.concat(".").concat(obj.extract[AssignmentMemberExpression].left.property.get("value").get.toString)
-                          case None => functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("name").get.toString
-                        }
-                      }
 
-                    } else if (f.equals("object")) {
+                  val left = parse(write(functionobj.extract[AssignmentMemberExpression].left))
 
-                      obj.extract[AssignmentMemberExpression].left.property.get("name") match {
-                        case Some(name) => functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("object").get.asInstanceOf[Map[String, Any]].get("name").get.toString.concat(".")
-                          .concat(obj.extract[AssignmentMemberExpression].left.`object`.get("property").get.asInstanceOf[Map[String, Any]].get("name").get.toString).concat(".")
-                          .concat(obj.extract[AssignmentMemberExpression].left.property.get("name").get.toString)
-                        case None => obj.extract[AssignmentMemberExpression].left.property.get("value") match {
-                          case Some(value) => functionName = obj.extract[AssignmentMemberExpression].left.`object`.get("object").get.asInstanceOf[Map[String, Any]].get("name").get.toString.concat(".")
-                            .concat(obj.extract[AssignmentMemberExpression].left.`object`.get("property").get.asInstanceOf[Map[String, Any]].get("name").get.toString).concat(".")
-                            .concat(obj.extract[AssignmentMemberExpression].left.property.get("value").get.toString)
-                          case None =>
-                        }
-                      }
-
-
-                    }
-
-                  )
+                  val nameList = getElement("name", left)
+                  var fName = ""
+                  for (name <- nameList.asInstanceOf[List[String]]) {
+                    fName = fName + name + "."
+                  }
+                  functionName = fName.substring(0, fName.length - 1)
 
 
                 } else if (v.values.toString.equals("Identifier")) {
-                  functionName = obj.extract[AssignmentIdentifierExpression].left.name
+                  functionName = functionobj.extract[AssignmentIdentifierExpression].left.name
                 }
                 case None =>
               }
 
 
-              (obj \\ "callee").toOption match {
-                case Some(callee) => if ("callee".r.findAllIn(compact(render(obj))).matchData.toList.size > 1) {
+              (functionobj \\ "callee").toOption match {
+                case Some(callee) => if ("callee".r.findAllIn(compact(render(functionobj))).matchData.toList.size > 1) {
+
                   callee.children.foreach(f =>
                     (f \ "type").toOption match {
                       case Some(t) => if (t.values.toString.contains("MemberExpression")) {
 
-                        functionList = f.extract[CalleeMemberExpression].`object` match {
-                          case Some(n) => n.name + "." + f.extract[CalleeMemberExpression].property.name :: functionList
-                          case None => f.extract[CalleeMemberExpression].property.name :: functionList
+                        val nameList = getElement("name", f)
+
+                        var fName = ""
+                        for (name <- nameList.asInstanceOf[List[String]]) {
+                          fName = fName + name + "."
                         }
+
+                        functionList = fName.substring(0, fName.length - 1) :: functionList
+
                       }
                       else if (t.values.toString.contains("Identifier"))
                         functionList = f.extract[CalleeIdentifierExpression].name :: functionList
@@ -98,11 +90,14 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
                 else {
                   callee.children.foreach(f =>
                     (f \ "type").toOption match {
-                      case Some(t) => if (t.values.toString.contains("MemberExpression"))
-                        functionList = f.extract[CalleeMemberExpression].`object` match {
-                          case Some(n) => n.name + "." + f.extract[CalleeMemberExpression].property.name :: functionList
-                          case None => f.extract[CalleeMemberExpression].property.name :: functionList
+                      case Some(t) => if (t.values.toString.contains("MemberExpression")) {
+                        val nameList = getElement("name", f)
+                        var fName = ""
+                        for (name <- nameList.asInstanceOf[List[String]]) {
+                          fName = fName + name + "."
                         }
+                        functionList = fName.substring(0, fName.length - 1) :: functionList
+                      }
                       else if (t.values.toString.contains("Identifier"))
                         functionList = f.extract[CalleeIdentifierExpression].name :: functionList
                       case None =>
@@ -113,58 +108,35 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
                 case None =>
               }
 
-
+              mapFunctionCallees +=  (functionName -> functionList.distinct)
             }
           case None =>
         }
-        mapFunctionCallees = mapFunctionCallees ++ Map(functionName -> functionList.distinct)
-
-      }
-      else if (closingIndex > 0 && createObjectMaps.functionsMap.get(k).get.contains("FunctionDeclaration")) {
-
-        functionName = obj.extract[FunctionDeclaration].id.name
 
 
-        (obj \\ "callee").toOption match {
+      } else if (closingIndex > 0 && createObjectMaps.functionsMap.get(k).get.contains("FunctionDeclaration")) {
+
+        functionName = functionobj.extract[FunctionDeclaration].id.name
+
+
+        (functionobj \\ "callee").toOption match {
           case Some(callee) =>
-            if ("callee".r.findAllIn(compact(render(obj))).matchData.toList.size > 1) {
+            if ("callee".r.findAllIn(compact(render(functionobj))).matchData.toList.size > 1) {
 
               callee.children.foreach(f => {
 
                 (f \ "type").toOption match {
                   case Some(t) =>
                     if (t.values.toString.contains("MemberExpression")) {
-                      if((f \ "property" \ "type").values.toString.equals("MemberExpression"))  {
 
+                      val nameList = getElement("name", f)
+                      var fName = ""
+                      for (name <- nameList.asInstanceOf[List[String]]) {
 
-                        functionList = f.extract[CalleeME].`object` match {
-                          case Some(n) => n.name + "." + f.extract[CalleeME].property.`object`.get("name") + "." + f.extract[CalleeME].property.property.name :: functionList
-                          case None => f.extract[CalleeME].property.`object`.get("name") + "." + f.extract[CalleeME].property.property.name :: functionList
-                        }
-
-                      } else if((f \ "property" \"type").values.toString.equals("Literal")) {
-
-                        f.extract[CalleeMEPropertyLiteral].`object` match {
-                          case Some(o) => o.keys.foreach( k =>  { if(k.contains("name")) {
-
-                            functionList = o.get("name").get.toString + "." + f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
-
-                          } else if(k.contains("callee")) {
-                            functionList = o.get("callee").get.asInstanceOf[Map[String,Any]].get("name").get.toString + "." +
-                              f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
-                          }
-
-                          })
-                          case None => functionList = f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
-
-                        }}
-                      else {
-
-                        functionList = f.extract[CalleeMemberExpression].`object` match {
-                          case Some(n) => n.name + "." + f.extract[CalleeMemberExpression].property.name :: functionList
-                          case None => f.extract[CalleeMemberExpression].property.name :: functionList
-                        }
+                        fName = fName + name + "."
                       }
+
+                      functionList = fName.substring(0, fName.length - 1) :: functionList
 
                     }
                     else if (t.values.toString.contains("Identifier")) {
@@ -182,37 +154,13 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
               (callee \ "type").toOption match {
                 case Some(t) =>
                   if (t.values.toString.contains("MemberExpression")) {
-                    if((callee \ "property" \ "type").values.toString.equals("MemberExpression"))  {
-
-
-                      functionList = callee.extract[CalleeME].`object` match {
-                        case Some(n) => n.name + "." + callee.extract[CalleeME].property.`object`.get("name") + "." + callee.extract[CalleeME].property.property.name :: functionList
-                        case None => callee.extract[CalleeME].property.`object`.get("name") + "." + callee.extract[CalleeME].property.property.name :: functionList
-                      }
-
-                    } else if((callee \ "property" \"type").values.toString.equals("Literal")) {
-
-                      callee.extract[CalleeMEPropertyLiteral].`object` match {
-                        case Some(o) => o.keys.foreach( k =>  { if(k.contains("name")) {
-
-                          functionList = o.get("name").get.toString + "." + callee.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
-
-                        } else if(k.contains("callee")) {
-                          functionList = o.get("callee").get.asInstanceOf[Map[String,Any]].get("name").get.toString + "." +
-                            callee.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
-                        }
-
-                        })
-                        case None => functionList = callee.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
-
-                      }}
-                    else {
-
-                      functionList = callee.extract[CalleeMemberExpression].`object` match {
-                        case Some(n) => n.name + "." + callee.extract[CalleeMemberExpression].property.name :: functionList
-                        case None => callee.extract[CalleeMemberExpression].property.name :: functionList
-                      }
+                    val nameList = getElement("name", callee)
+                    var fName = ""
+                    for (name <- nameList.asInstanceOf[List[String]]) {
+                      fName = fName + name + "."
                     }
+
+                    functionList = fName.substring(0, fName.length - 1) :: functionList
                   }
                   else if (t.values.toString.contains("Identifier")) {
 
@@ -228,19 +176,20 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
           case None =>
         }
 
-        mapFunctionCallees = mapFunctionCallees ++ Map(functionName -> functionList.distinct)
-
-      }
-      else if (closingIndex > 0 && createObjectMaps.functionsMap.get(k).get.contains("VariableDeclarator")) {
+        mapFunctionCallees += (functionName -> functionList.distinct)
 
 
-        (obj \ "init" \ "type").toOption match {
+
+      } else if (closingIndex > 0 && createObjectMaps.functionsMap.get(k).get.contains("VariableDeclarator")) {
+
+
+        (functionobj \ "init" \ "type").toOption match {
           case Some(fe) => if (fe.values.toString.contains("FunctionExpression") || fe.values.toString.contains("ArrowFunctionExpression")) {
-            functionName = obj.extract[VariableDeclarator].id.name
+            functionName = functionobj.extract[VariableDeclarator].id.name
 
-            (obj \\ "callee").toOption match {
+            (functionobj \\ "callee").toOption match {
 
-              case Some(callee) => if ("callee".r.findAllIn(compact(render(obj))).matchData.toList.size > 1) {
+              case Some(callee) => if ("callee".r.findAllIn(compact(render(functionobj))).matchData.toList.size > 1) {
 
                 callee.children.foreach(f => {
 
@@ -248,36 +197,12 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
                     case Some(t) =>
                       if (t.values.toString.contains("MemberExpression")) {
 
-                        if((f \ "property" \ "type").values.toString.equals("MemberExpression"))  {
-
-
-                          functionList = f.extract[CalleeME].`object` match {
-                            case Some(n) => n.name + "." + f.extract[CalleeME].property.`object`.get("name") + "." + f.extract[CalleeME].property.property.name :: functionList
-                            case None => f.extract[CalleeME].property.`object`.get("name") + "." + f.extract[CalleeME].property.property.name :: functionList
-                          }
-
-                        } else if((f \ "property" \"type").values.toString.equals("Literal")) {
-
-                          f.extract[CalleeMEPropertyLiteral].`object` match {
-                            case Some(o) => o.keys.foreach( k =>  { if(k.contains("name")) {
-
-                              functionList = o.get("name").get.toString + "." + f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
-
-                            } else if(k.contains("callee")) {
-                              functionList = o.get("callee").get.asInstanceOf[Map[String,Any]].get("name").get.toString + "." +
-                                f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
-                            }
-
-                            })
-                            case None => functionList = f.extract[CalleeMEPropertyLiteral].property.get("value").get.toString :: functionList
-
-                          }}
-                        else {
-                          functionList = f.extract[CalleeMemberExpression].`object` match {
-                            case Some(n) => n.name + "." + f.extract[CalleeMemberExpression].property.name :: functionList
-                            case None => f.extract[CalleeMemberExpression].property.name :: functionList
-                          }
+                        val nameList = getElement("name", f)
+                        var fName = ""
+                        for (name <- nameList.asInstanceOf[List[String]]) {
+                          fName = fName + name + "."
                         }
+                        functionList = fName.substring(0, fName.length - 1) :: functionList
                       }
                       else if (t.values.toString.contains("Identifier")) {
 
@@ -294,20 +219,12 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
                 (callee \ "type").toOption match {
                   case Some(t) =>
                     if (t.values.toString.contains("MemberExpression")) {
-                      if((callee \ "property" \ "type").values.toString.equals("MemberExpression"))  {
-
-
-                        functionList = callee.extract[CalleeME].`object` match {
-                          case Some(n) => n.name + "." + callee.extract[CalleeME].property.`object`.get("name") + "." + callee.extract[CalleeME].property.property.name :: functionList
-                          case None => callee.extract[CalleeME].property.`object`.get("name") + "." + callee.extract[CalleeME].property.property.name :: functionList
-                        }
-
-                      } else {
-                        functionList = callee.extract[CalleeMemberExpression].`object` match {
-                          case Some(n) => n.name + "." + callee.extract[CalleeMemberExpression].property.name :: functionList
-                          case None => callee.extract[CalleeMemberExpression].property.name :: functionList
-                        }
+                      val nameList = getElement("name", callee)
+                      var fName = ""
+                      for (name <- nameList.asInstanceOf[List[String]]) {
+                        fName = fName + name + "."
                       }
+                      functionList = fName.substring(0, fName.length - 1) :: functionList
                     }
                     else if (t.values.toString.contains("Identifier")) {
 
@@ -329,9 +246,11 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
         }
 
 
-        mapFunctionCallees = mapFunctionCallees ++ Map(functionName -> functionList.distinct)
+        mapFunctionCallees += (functionName -> functionList.distinct)
+
 
       }
+
 
 
       if (functionList.distinct.contains(functionName)) {
@@ -356,15 +275,27 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
 
     for ((k, v) <- mapFunctionCallees) {
 
+
       if (v.size > HighestFanOut)
         HighestFanOut = v.size
 
       totalFanOut = totalFanOut + v.size
-
+      fanIn = 0
       for ((fname, callees) <- mapFunctionCallees) {
 
         if (callees.contains(k)) {
           fanIn = fanIn + 1
+        } else {
+          if(k.lastIndexOf(".") > 0) {
+            val lastPartOfFunction = k.substring(k.lastIndexOf(".")+1)
+            callees.foreach( f => {
+              if(f.lastIndexOf(".")>0 && f.substring(f.lastIndexOf(".")+1).equals(lastPartOfFunction)) {
+                fanIn = fanIn +1
+              } else if(f.equals(lastPartOfFunction)) {
+                fanIn = fanIn + 1
+              }
+            })
+          }
         }
 
       }
@@ -377,10 +308,12 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
 
     }
 
+
     if (mapFunctionCallees.size > 0) {
-      AvgFanOut = totalFanOut / mapFunctionCallees.size
-      AvgFanIn = totalFanIn / mapFunctionCallees.size
+      AvgFanOut = BigDecimal(totalFanOut.toDouble / mapFunctionCallees.size.toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
+      AvgFanIn = BigDecimal(totalFanIn.toDouble / mapFunctionCallees.size.toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
     }
+
 
 
   }
@@ -513,7 +446,4 @@ class FanInFanout(ast: String,createObjectMaps: CreateObjectMaps) extends HerseF
   }
 
 
-
 }
-
-

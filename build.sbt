@@ -109,7 +109,7 @@ libraryDependencies ++= Seq(
 
 //This library is to handle tarball files
 libraryDependencies += "org.apache.commons" % "commons-compress" % "1.18"
-
+libraryDependencies += "org.json4s" %% "json4s-native" % "3.6.4"
 libraryDependencies += "com.lihaoyi" %% "upickle" % "0.7.1"
 
 libraryDependencies += "au.com.bytecode" % "opencsv" % "2.4"

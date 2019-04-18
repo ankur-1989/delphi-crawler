@@ -62,6 +62,18 @@ package object Herse {
                                  async: Boolean
                                )
 
+  case class ArrowFunctionExpression(
+                                      `type`: String,
+                                      id: Id,
+                                      params: List[Id],
+                                      body: Body,
+                                      generator: Boolean,
+                                      expression: Boolean,
+                                      async: Boolean
+
+                                    )
+
+
   case class CalleeMemberExpression(
                                      `type`: String,
                                      computed: Boolean,
