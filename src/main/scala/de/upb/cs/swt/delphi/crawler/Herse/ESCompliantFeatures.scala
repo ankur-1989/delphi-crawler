@@ -10,6 +10,34 @@ class ESCompliantFeatures(ast: JValue) extends HerseFeatures {
 
 
 
+  def checkES2019Compliant = {
+
+    (ast \\ "expression" \\ "property").toOption match {
+      case Some(prop) => prop findField {
+
+        case JField("name", JString("flat")) => true
+        case JField("name", JString("flatMap")) => true
+        case JField("name", JString("fromEntries")) => true
+        case JField("name", JString("trimStart")) => true
+        case JField("name", JString("trimEnd")) => true
+        case JField("name", JString("description")) => true
+        case _ => false
+      } match {
+        case Some(feature) => {
+
+          ES2019Compliant = 1
+          ES2018Compliant = 1
+          ES2017Compliant = 1
+          ES2016Compliant = 1
+          ES2015Compliant = 1
+
+        }
+        case None =>
+      }
+      case None =>
+    }
+  }
+
   def checkES2018Compliant = {
     ast findField {
       case JField("name", JString("finally")) => true
@@ -170,8 +198,10 @@ class ESCompliantFeatures(ast: JValue) extends HerseFeatures {
     if(ES2015Compliant == 1) { checkES2016Compliant }
     if(ES2016Compliant == 1) {checkES2017Compliant}
     if(ES2017Compliant == 1 ) {checkES2018Compliant}
+    if(ES2018Compliant == 1 ) {checkES2019Compliant}
 
-    Map("ES2017Compliant" -> ES2017Compliant , "ES2018Compliant" -> ES2018Compliant , "ES2016Compliant" -> ES2016Compliant , "ES2015Compliant" -> ES2015Compliant)
+    Map("ES2017Compliant" -> ES2017Compliant , "ES2018Compliant" -> ES2018Compliant , "ES2016Compliant" -> ES2016Compliant , "ES2015Compliant" -> ES2015Compliant,
+      "ES2019Compliant" -> ES2019Compliant)
 
   }
 

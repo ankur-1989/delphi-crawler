@@ -53,7 +53,7 @@ trait HerseFeatures {
   var ES2017Compliant  = 0
   var ES2016Compliant  = 0
   var ES2015Compliant  = 0
-
+  var ES2019Compliant = 0
 
 
 

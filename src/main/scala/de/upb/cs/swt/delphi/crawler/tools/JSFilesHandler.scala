@@ -6,9 +6,7 @@
 package de.upb.cs.swt.delphi.crawler.tools
 
 import java.io.{BufferedInputStream, BufferedOutputStream, File, FileOutputStream}
-import java.net.URL
 
-import de.upb.cs.swt.delphi.crawler.discovery.npm.NpmIdentifier
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.io.FileUtils
